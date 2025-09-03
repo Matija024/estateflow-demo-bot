@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { getHardcodedAnswer } from "@/lib/hardcoded/answers";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -85,19 +86,46 @@ export function ChatInterface({ selectedDocuments }: ChatInterfaceProps) {
 
       setMessages(prev => [...prev, assistantMessage]);
     } else {
-      // Fallback generic response
-      const defaultThinking = ["Denke nach...", "Verarbeite Anfrage..."];
-      await simulateThinkingSequence(defaultThinking);
+      // Call real ChatGPT API via edge function
+      const thinkingSequence = ["Verbinde mit ChatGPT...", "Analysiere Anfrage...", "Generiere Antwort..."];
+      await simulateThinkingSequence(thinkingSequence);
       
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: `Entschuldigung, ich konnte zu "${content}" keine spezifische Antwort in den ausgewählten Dokumenten finden. Bitte versuchen Sie eine andere Frage oder stellen Sie sicher, dass relevante Dokumente hochgeladen und ausgewählt sind.`,
-        timestamp: new Date(),
-        thinking: defaultThinking
-      };
+      try {
+        const { data, error } = await supabase.functions.invoke('chat-gpt', {
+          body: { 
+            message: content,
+            context: selectedDocuments.length > 0 ? "Ausgewählte Dokumente verfügbar" : ""
+          }
+        });
 
-      setMessages(prev => [...prev, assistantMessage]);
+        if (error) {
+          console.error('Edge function error:', error);
+          throw error;
+        }
+
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: data.response || "Entschuldigung, ich konnte keine Antwort generieren.",
+          timestamp: new Date(),
+          sources: data.sources || [],
+          thinking: thinkingSequence
+        };
+
+        setMessages(prev => [...prev, assistantMessage]);
+      } catch (error) {
+        console.error('Error calling ChatGPT:', error);
+        
+        const errorMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant', 
+          content: "Entschuldigung, es gab einen Fehler beim Verbinden mit ChatGPT. Bitte versuchen Sie es erneut.",
+          timestamp: new Date(),
+          thinking: thinkingSequence
+        };
+
+        setMessages(prev => [...prev, errorMessage]);
+      }
     }
 
     setIsLoading(false);
