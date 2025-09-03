@@ -8,33 +8,57 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 250 20% 98%;
+    --foreground: 240 10% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 240 10% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 240 10% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 260 50% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 250 30% 95%;
+    --secondary-foreground: 240 10% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 250 20% 96%;
+    --muted-foreground: 240 8% 55%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 260 60% 85%;
+    --accent-foreground: 260 50% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 250 20% 90%;
+    --input: 250 20% 94%;
+    --ring: 260 50% 55%;
+
+    /* EstateFlow specific tokens */
+    --estate-purple: 260 60% 85%;
+    --estate-purple-dark: 260 50% 55%;
+    --estate-purple-light: 260 60% 95%;
+    --estate-text-primary: 240 10% 15%;
+    --estate-text-secondary: 240 8% 55%;
+    --estate-bg-primary: 250 20% 98%;
+    --estate-bg-secondary: 0 0% 100%;
+    --estate-border: 250 20% 90%;
+    --estate-shadow: 260 20% 85%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--estate-purple)), hsl(var(--estate-purple-dark)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--estate-bg-primary)), hsl(var(--estate-bg-secondary)));
+
+    /* Shadows */
+    --shadow-elegant: 0 4px 20px -4px hsl(var(--estate-shadow) / 0.15);
+    --shadow-card: 0 2px 8px -2px hsl(var(--estate-shadow) / 0.1);
+    --shadow-button: 0 2px 4px -1px hsl(var(--estate-shadow) / 0.2);
+
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease-out;
 
     --radius: 0.5rem;
 
