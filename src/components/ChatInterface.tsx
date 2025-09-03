@@ -215,6 +215,31 @@ export function ChatInterface({ selectedDocuments }: ChatInterfaceProps) {
         )}
       </div>
 
+      {/* Input Area - Always visible when messages exist */}
+      {messages.length > 0 && (
+        <div className="border-t border-estate-border bg-estate-bg-secondary px-6 py-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex gap-3">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Nachricht eingeben..."
+                disabled={isLoading}
+                className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple"
+              />
+              <Button
+                onClick={() => handleSendMessage(inputValue)}
+                disabled={!inputValue.trim() || isLoading}
+                className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4"
+              >
+                <Send size={16} />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

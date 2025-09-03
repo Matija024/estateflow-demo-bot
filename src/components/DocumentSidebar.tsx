@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Upload, FileText, Calendar, ChevronDown, ChevronUp } from "lucide-react";
+import { Upload, FileText, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Document {
@@ -46,9 +46,9 @@ export function DocumentSidebar({ documents, onDocumentSelect, onUpload }: Docum
             variant="ghost"
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-estate-text-secondary hover:text-estate-text-primary ml-auto"
+            className="text-estate-text-secondary hover:text-estate-text-primary ml-auto hover:bg-estate-bg-primary"
           >
-            {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            {isExpanded ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
           </Button>
         </div>
         
