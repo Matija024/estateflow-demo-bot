@@ -143,7 +143,7 @@ export function ChatInterface({ selectedDocuments }: ChatInterfaceProps) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-estate-bg-primary">
+    <div className="flex flex-col h-full bg-estate-bg-primary">
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-6">
         {messages.length === 0 ? (
@@ -157,7 +157,7 @@ export function ChatInterface({ selectedDocuments }: ChatInterfaceProps) {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl mb-8">
               {STARTER_QUESTIONS.map((question, index) => (
                 <Button
                   key={index}
@@ -168,6 +168,27 @@ export function ChatInterface({ selectedDocuments }: ChatInterfaceProps) {
                   {question}
                 </Button>
               ))}
+            </div>
+
+            {/* Input field for custom questions */}
+            <div className="w-full max-w-2xl">
+              <div className="flex gap-3">
+                <Input
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Oder stellen Sie eine eigene Frage..."
+                  disabled={isLoading}
+                  className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple"
+                />
+                <Button
+                  onClick={() => handleSendMessage(inputValue)}
+                  disabled={!inputValue.trim() || isLoading}
+                  className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4"
+                >
+                  <Send size={16} />
+                </Button>
+              </div>
             </div>
           </div>
         ) : (

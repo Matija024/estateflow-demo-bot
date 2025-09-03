@@ -3,13 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Upload, FileText, Calendar, HardDrive, ChevronDown, ChevronUp } from "lucide-react";
+import { Upload, FileText, Calendar, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Document {
   id: string;
   name: string;
-  size: string;
   uploadDate: Date;
   type: string;
   selected: boolean;
@@ -32,35 +31,42 @@ export function DocumentSidebar({ documents, onDocumentSelect, onUpload }: Docum
   };
 
   return (
-    <div className="w-80 bg-estate-bg-secondary border-r border-estate-border flex flex-col h-screen">
+    <div className={cn(
+      "bg-estate-bg-secondary border-r border-estate-border flex flex-col h-full transition-all duration-300",
+      isExpanded ? "w-80" : "w-16"
+    )}>
       <div className="p-4 border-b border-estate-border">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-estate-text-primary">
-            Dokumente
-          </h2>
+          {isExpanded && (
+            <h2 className="text-lg font-semibold text-estate-text-primary">
+              Dokumente
+            </h2>
+          )}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-estate-text-secondary hover:text-estate-text-primary"
+            className="text-estate-text-secondary hover:text-estate-text-primary ml-auto"
           >
             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </Button>
         </div>
         
-        <div className="relative">
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            multiple
-            onChange={handleFileUpload}
-            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-          />
-          <Button className="w-full bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button">
-            <Upload size={16} className="mr-2" />
-            Dokumente hochladen
-          </Button>
-        </div>
+        {isExpanded && (
+          <div className="relative">
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              multiple
+              onChange={handleFileUpload}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+            <Button className="w-full bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button">
+              <Upload size={16} className="mr-2" />
+              Dokumente hochladen
+            </Button>
+          </div>
+        )}
       </div>
 
       {isExpanded && (
@@ -97,24 +103,17 @@ export function DocumentSidebar({ documents, onDocumentSelect, onUpload }: Docum
                         </h3>
                       </div>
                       
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-1.5 text-xs text-estate-text-secondary">
-                          <HardDrive size={12} />
-                          <span>{doc.size}</span>
-                        </div>
-                        
-                        <div className="flex items-center gap-1.5 text-xs text-estate-text-secondary">
-                          <Calendar size={12} />
-                          <span>
-                            {doc.uploadDate.toLocaleDateString('de-DE', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
-                          </span>
-                        </div>
+                      <div className="flex items-center gap-1.5 text-xs text-estate-text-secondary">
+                        <Calendar size={12} />
+                        <span>
+                          {doc.uploadDate.toLocaleDateString('de-DE', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
                       </div>
                     </div>
                   </div>

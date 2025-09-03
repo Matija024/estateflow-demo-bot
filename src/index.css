@@ -37,9 +37,9 @@ All colors MUST be HSL.
     --ring: 260 50% 55%;
 
     /* EstateFlow specific tokens */
-    --estate-purple: 260 60% 85%;
-    --estate-purple-dark: 260 50% 55%;
-    --estate-purple-light: 260 60% 95%;
+    --estate-purple: 218 70% 50%;
+    --estate-purple-dark: 218 70% 40%;
+    --estate-purple-light: 218 70% 95%;
     --estate-text-primary: 240 10% 15%;
     --estate-text-secondary: 240 8% 55%;
     --estate-bg-primary: 250 20% 98%;

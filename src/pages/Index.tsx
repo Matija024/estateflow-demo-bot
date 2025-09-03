@@ -6,7 +6,6 @@ import { Header } from "@/components/Header";
 interface Document {
   id: string;
   name: string;
-  size: string;
   uploadDate: Date;
   type: string;
   selected: boolean;
@@ -25,7 +24,6 @@ const Index = () => {
     const newDocs: Document[] = Array.from(files).map(file => ({
       id: Date.now().toString() + Math.random(),
       name: file.name,
-      size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
       uploadDate: new Date(),
       type: file.type,
       selected: true
