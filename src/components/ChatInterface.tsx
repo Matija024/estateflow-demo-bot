@@ -369,7 +369,7 @@ export function ChatInterface({
         setMessages(prev => [...prev, assistantMessage]);
       } else {
         // Call real ChatGPT API via edge function
-        const thinkingSequence = ["Verbinde mit ChatGPT...", "Analysiere Anfrage...", "Generiere Antwort..."];
+        const thinkingSequence = ["Analysiere Anfrage...", "Generiere Antwort..."];
         await simulateThinkingSequence(thinkingSequence);
         
         try {
