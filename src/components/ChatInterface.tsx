@@ -21,7 +21,7 @@ interface Message {
 interface ChatInterfaceProps {
   selectedDocuments: string[];
 }
-const STARTER_QUESTIONS = ["Gib mir einen Überblick zur Immobilie", "Erstelle einen groben Geschäftsplan", "Welche Mietverträge, die ich betreue, stehen in den nächsten 9 Monaten zur Optierung an?", "Welche Risiken gibt es?"];
+const STARTER_QUESTIONS = ["Soll ich Dir eine Liste zum Handlungsbedarf für deine Bestandsmietverträge erstellen?", "Gib mir eine Übersicht über den Neuvermietungsbedarf für meine Objekte in Bad Homburg?", "Erstelle mir einen Monatsbericht über mein Immobilienportfolio für die Österreichische Versorgungskammer?", "Prüfe bitte, ob für mein Objekt ‚Alpha Park, München' weitere Fördergelder zur Verfügung stehen."];
 export function ChatInterface({
   selectedDocuments
 }: ChatInterfaceProps) {
