@@ -122,10 +122,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                         <div className="text-xs text-estate-text-secondary mb-1">
                           {step.type === 'thinking' ? '🔍 Denkt:' : '📊 Macht:'} 
                         </div>
-                        <div className="text-xs text-estate-text-secondary font-medium mb-2">
-                          "{step.action}"
-                        </div>
-                        <div className="text-xs text-estate-text-secondary leading-relaxed">
+                        <div className="text-xs text-estate-text-secondary leading-relaxed whitespace-pre-wrap">
                           {step.details}
                         </div>
                       </div>
