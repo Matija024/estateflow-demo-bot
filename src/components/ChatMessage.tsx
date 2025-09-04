@@ -116,13 +116,16 @@ export function ChatMessage({ message }: ChatMessageProps) {
                     <div key={step.id} className="flex gap-2 p-2 bg-estate-bg-primary rounded-lg border border-estate-border">
                       <span className="text-sm flex-shrink-0">{step.icon}</span>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-medium text-estate-text-primary truncate">
-                          {step.agent}
+                        <div className="text-sm font-bold text-estate-text-primary mb-1">
+                          👤 {step.agent}
                         </div>
-                        <div className="text-xs text-estate-text-secondary">
-                          {step.type === 'thinking' ? 'Denkt...' : 'Macht...'} {step.action}
+                        <div className="text-xs text-estate-text-secondary mb-1">
+                          {step.type === 'thinking' ? '🔍 Denkt:' : '📊 Macht:'} 
                         </div>
-                        <div className="text-xs text-estate-text-secondary mt-1">
+                        <div className="text-xs text-estate-text-secondary font-medium mb-2">
+                          "{step.action}"
+                        </div>
+                        <div className="text-xs text-estate-text-secondary leading-relaxed">
                           {step.details}
                         </div>
                       </div>

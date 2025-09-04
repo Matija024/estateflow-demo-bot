@@ -16,18 +16,18 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     id: 1,
     agent: "Mietvertrags-Analyseagent",
     type: "thinking",
-    action: "Öffne Datenquellen – CAFM, ERP, Vertragsdatenbank",
-    details: "Ich öffne jetzt die Datenquellen – CAFM, ERP, Vertragsdatenbank – und ziehe mir alle Mietverträge in ein einheitliches Schema. Ich erkenne Kündigungsfristen, Restlaufzeiten und potenzielle Risiken.",
-    duration: 3200,
+    action: "Öffne Datenquellen – CAFM, ERP, Vertragsdatenbank – ziehe alle Mietverträge, erkenne Kündigungsfristen, Restlaufzeiten und potenzielle Risiken.",
+    details: "Öffne Datenquellen – CAFM, ERP, Vertragsdatenbank – ziehe alle Mietverträge, erkenne Kündigungsfristen, Restlaufzeiten und potenzielle Risiken.",
+    duration: 3000,
     icon: "🔍"
   },
   {
     id: 2,
     agent: "Mietvertrags-Analyseagent",
     type: "doing",
-    action: "Erstelle Vertragsmatrix",
-    details: "Ich habe die Vertragsmatrix erstellt – mit allen Mietern, Flächen, Laufzeiten und Risikoleveln. Ich übergebe sie an meinen Kollegen, den Kategorisierungsagenten.",
-    duration: 2800,
+    action: "Vertragsmatrix erstellt – Mieter, Flächen, Laufzeiten und Risikolevel. Übergebe sie an Kategorisierungsagenten.",
+    details: "Vertragsmatrix erstellt – Mieter, Flächen, Laufzeiten und Risikolevel. Übergebe sie an Kategorisierungsagenten.",
+    duration: 2500,
     icon: "📊"
   },
 
@@ -36,211 +36,191 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     id: 3,
     agent: "Kategorisierungs- & Priorisierungsagent",
     type: "thinking",
-    action: "Bewerte jeden Mieter nach Größe und Risiko",
-    details: "Ich nehme die Vertragsmatrix und bewerte jeden Mieter: groß, mittel, klein – und wie riskant der Vertrag ist. Daraus leite ich A-, B- und C-Mieter ab.",
-    duration: 3500,
+    action: "Erstelle A- B- C- Analyse anhand Vertragsmatrix",
+    details: "Erstelle A- B- C- Analyse anhand Vertragsmatrix",
+    duration: 2800,
     icon: "🔍"
   },
+
+  // 3. Interaktions & Datenerhebungsagent
   {
     id: 4,
-    agent: "Kategorisierungs- & Priorisierungsagent",
-    type: "doing",
-    action: "Segmentiere Mieter in Kategorien",
-    details: "Meine Kategorisierung ist fertig: A-Mieter für persönliche Gespräche, B-Mieter für digitale Umfragen, C-Mieter nur Monitoring. Ich gebe die Liste an den Interaktionsagenten weiter.",
-    duration: 2600,
-    icon: "📊"
-  },
-
-  // 3. Interaktions- & Datenerhebungsagent
-  {
-    id: 5,
-    agent: "Interaktions- & Datenerhebungsagent",
+    agent: "Interaktions & Datenerhebungsagent",
     type: "thinking",
-    action: "Bereite zielgruppenspezifische Ansprache vor",
-    details: "Ich gehe die Liste durch. Für die A-Mieter bereite ich Gesprächsleitfäden vor und plane Termine. Für B-Mieter versende ich digitale Umfragen. Für C-Mieter schicke ich kurze Status-Formulare.",
-    duration: 3800,
+    action: "Rückmeldung aggregiert --> Weiterleitung an Dashboard Agenten",
+    details: "Rückmeldung aggregiert --> Weiterleitung an Dashboard Agenten",
+    duration: 3200,
     icon: "🔍"
-  },
-  {
-    id: 6,
-    agent: "Interaktions- & Datenerhebungsagent",
-    type: "doing",
-    action: "Sammle Mietrückmeldungen",
-    details: "Ich habe die Rückmeldungen gesammelt: Manche Mieter brauchen mehr Fläche, manche weniger, andere bleiben stabil. Diese Daten gehen jetzt gesammelt an den Dashboard-Agenten.\n\nNachfrage mit zusätzlichen Dokumenten: Lieferung einer Liste mit Ansprechpartnern, Terminvorschlägen und zugehörige Gesprächsleitfäden für Mieter der Kategorie A\n\nMöchten Sie die Liste mit Ansprechpartnern, Terminvorschlägen und Gesprächsleitfäden für A-Mieter jetzt erhalten? (ja/nein)",
-    duration: 3000,
-    icon: "📊",
-    requiresUserInput: true,
-    userPrompt: "Möchten Sie die Liste mit Ansprechpartnern, Terminvorschlägen und Gesprächsleitfäden für A-Mieter jetzt erhalten? (ja/nein)"
-  },
-
-  // CONFIRMATION
-  {
-    id: 7,
-    agent: "System",
-    type: "confirmation",
-    action: "Verarbeite Benutzerantwort",
-    details: "Daten empfangen - arbeite nun mit den neuen Informationen weiter",
-    duration: 1500,
-    icon: "✅"
   },
 
   // 4. Dashboard- & Auswertungsagent
   {
-    id: 8,
+    id: 5,
     agent: "Dashboard- & Auswertungsagent",
     type: "thinking",
-    action: "Konsolidiere alle Daten im Dashboard",
-    details: "Ich spiele alle Daten in mein Dashboard ein: Vertragsinfos, Rückmeldungen, Kategorien. Ich bereinige die Formate und verknüpfe alles miteinander.",
-    duration: 3400,
+    action: "Daten empfangen Dashboard erstellen: Vertragsinfos, Rückmeldungen, Kategorien.",
+    details: "Daten empfangen Dashboard erstellen: Vertragsinfos, Rückmeldungen, Kategorien.",
+    duration: 2600,
     icon: "🔍"
   },
   {
-    id: 9,
+    id: 6,
     agent: "Dashboard- & Auswertungsagent",
     type: "doing",
-    action: "Erstelle Übersicht mit Ampellogik",
-    details: "Hier sind die Ergebnisse: eine Übersicht mit allen Mietern, Bedarfen, Risiken und Forecasts. Ich markiere in Ampellogik (rot/gelb/grün). Diese Auswertung gebe ich an den Entscheidungsagenten weiter.",
-    duration: 2900,
+    action: "Übersicht Mieter, Bedarfe, Risiken und Forecasts. Ampellogik (rot/gelb/grün). Weitergabe an Entscheidungsagenten",
+    details: "Übersicht Mieter, Bedarfe, Risiken und Forecasts. Ampellogik (rot/gelb/grün). Weitergabe an Entscheidungsagenten",
+    duration: 2400,
     icon: "📊"
   },
 
   // 5. Entscheidungsagent
   {
-    id: 10,
+    id: 7,
     agent: "Entscheidungsagent",
     type: "thinking",
-    action: "Analysiere Handlungsoptionen",
-    details: "Ich prüfe die Rückmeldungen und entscheide: Wer braucht ein Erweiterungsangebot? Wer kündigt bald und muss neu vermarktet werden? Wer will verlängern?",
-    duration: 4000,
+    action: "Prüfe Rückmeldungen und entscheide: Wer braucht ein Erweiterungsangebot? Wer kündigt bald und muss neu vermarktet werden? Wer will verlängern?",
+    details: "Prüfe Rückmeldungen und entscheide: Wer braucht ein Erweiterungsangebot? Wer kündigt bald und muss neu vermarktet werden? Wer will verlängern?",
+    duration: 3500,
     icon: "🔍"
   },
   {
-    id: 11,
+    id: 8,
     agent: "Entscheidungsagent",
     type: "doing",
-    action: "Entwickle Maßnahmenpakete",
-    details: "Ich habe konkrete Maßnahmenpakete abgeleitet und an die Vermarktungs- und Neuakquise-Agenten übergeben.",
-    duration: 3200,
+    action: "Konkrete Maßnahmenpakete abgeleitet, Weitergabe an Vermarktungs- und Neuakquise-Agenten.",
+    details: "Konkrete Maßnahmenpakete abgeleitet, Weitergabe an Vermarktungs- und Neuakquise-Agenten.",
+    duration: 2800,
     icon: "📊"
   },
 
   // 6. Firmenlistenagent
   {
-    id: 12,
+    id: 9,
     agent: "Firmenlistenagent",
     type: "thinking",
-    action: "Durchsuche Unternehmensverzeichnisse",
-    details: "Ich scanne Branchen- und Firmenverzeichnisse in der Region. Ich suche Unternehmen mit der richtigen Größe, Branche und Nähe zum Standort.",
-    duration: 3600,
+    action: "Scanne Branchen- und Firmenverzeichnisse Region. Suche passende Unternehmen.",
+    details: "Scanne Branchen- und Firmenverzeichnisse Region. Suche passende Unternehmen.",
+    duration: 3000,
     icon: "🔍"
   },
   {
-    id: 13,
+    id: 10,
     agent: "Firmenlistenagent",
     type: "doing",
-    action: "Erstelle qualifizierte Longlist",
-    details: "Ich habe eine Longlist potenzieller Mieter erstellt – sortiert nach Relevanz. Diese Liste gebe ich an den Ansprechpartner-Agenten weiter.",
-    duration: 2700,
+    action: "Longlist potenzieller Mieter erstellt. Weitergabe an Ansprechpartner-Agenten.",
+    details: "Longlist potenzieller Mieter erstellt. Weitergabe an Ansprechpartner-Agenten.",
+    duration: 2200,
     icon: "📊"
   },
 
   // 7. Ansprechpartner-Identifikationsagent
   {
-    id: 14,
+    id: 11,
     agent: "Ansprechpartner-Identifikationsagent",
     type: "thinking",
-    action: "Recherchiere Entscheidungsträger",
-    details: "Ich recherchiere gezielt die richtigen Personen in den Firmen – Geschäftsführer, Immobilienverantwortliche oder HR-Leiter. Ich prüfe Profile auf LinkedIn, Websites und CRM-Daten.",
-    duration: 4200,
+    action: "Recherchiere gezielt die richtigen Personen in den Firmen – Geschäftsführer, Immobilienverantwortliche oder HR-Leiter. Prüfe Profile auf LinkedIn, Websites und CRM-Daten.",
+    details: "Recherchiere gezielt die richtigen Personen in den Firmen – Geschäftsführer, Immobilienverantwortliche oder HR-Leiter. Prüfe Profile auf LinkedIn, Websites und CRM-Daten.",
+    duration: 3800,
     icon: "🔍"
   },
   {
-    id: 15,
+    id: 12,
     agent: "Ansprechpartner-Identifikationsagent",
     type: "doing",
-    action: "Erstelle qualifizierte Kontaktliste",
-    details: "Hier ist die Kontaktliste mit Namen, Rollen und Matching Scores. Ich gebe sie an den Ansprache-Agenten.",
-    duration: 3100,
+    action: "Hier ist die Kontaktliste mit Namen, Rollen und Matching Scores. Weitergabe an Ansprache-Agenten.",
+    details: "Hier ist die Kontaktliste mit Namen, Rollen und Matching Scores. Weitergabe an Ansprache-Agenten.",
+    duration: 2600,
     icon: "📊"
   },
 
   // 8. Ansprache- & Terminvereinbarungsagent
   {
-    id: 16,
+    id: 13,
     agent: "Ansprache- & Terminvereinbarungsagent",
     type: "thinking",
-    action: "Entwickle personalisierte Ansprache-Strategie",
-    details: "Ich kontaktiere die priorisierten Ansprechpartner – per E-Mail, LinkedIn oder Telefon. Ich nutze personalisierte Textbausteine und erinnere automatisch nach.",
-    duration: 3800,
+    action: "Kontaktiere die priorisierten Ansprechpartner – per E-Mail, LinkedIn oder Telefon und nutze personalisierte Textbausteine und erinnere automatisch.",
+    details: "Kontaktiere die priorisierten Ansprechpartner – per E-Mail, LinkedIn oder Telefon und nutze personalisierte Textbausteine und erinnere automatisch.",
+    duration: 3400,
     icon: "🔍"
   },
   {
-    id: 17,
+    id: 14,
     agent: "Ansprache- & Terminvereinbarungsagent",
     type: "doing",
-    action: "Vereinbare Ersttermine",
-    details: "Ich habe Termine mit Interessenten vereinbart. Diese leite ich an den Makler-/Marketing-Agenten und das Abschlussmanagement weiter.",
-    duration: 2800,
+    action: "Termine mit Interessenten vereinbart. Weitergabe an Makler-/Marketing-Agenten und Abschlussmanagement.",
+    details: "Termine mit Interessenten vereinbart. Weitergabe an Makler-/Marketing-Agenten und Abschlussmanagement.",
+    duration: 2400,
     icon: "📊"
   },
 
   // 9. Maklermanagement- & Netzwerksteuerungsagent
   {
-    id: 18,
+    id: 15,
     agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "thinking",
-    action: "Koordiniere externes Maklernetzwerk",
-    details: "Ich steuere externe Makler: Wer darf welche Fläche vermarkten, wie ist die Performance, wo gibt es Doppelansprachen?",
-    duration: 3300,
+    action: "Steuere externe Makler: ?",
+    details: "Steuere externe Makler: ?",
+    duration: 2800,
     icon: "🔍"
   },
   {
-    id: 19,
+    id: 16,
     agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "doing",
-    action: "Optimiere Makler-Pipeline",
-    details: "Ich dokumentiere alle Makler-Leads, bewerte die Partner und spiele qualifizierte Kontakte in die Pipeline zurück.",
-    duration: 2600,
+    action: "Dokumentation Makler-Leads --> Rückspielen qualifizierter Kontakte in Pipeline.",
+    details: "Dokumentation Makler-Leads --> Rückspielen qualifizierter Kontakte in Pipeline.",
+    duration: 2200,
     icon: "📊"
   },
 
   // 10. Marketingmaßnahmen- & Sichtbarkeitsagent
   {
-    id: 20,
+    id: 17,
     agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "thinking",
-    action: "Entwickle umfassende Marketing-Strategie",
-    details: "Ich mache das Objekt sichtbar – mit Exposés, Anzeigen, Kampagnen und Plattform-Listings. Ich überwache Reichweite und Resonanz.",
-    duration: 3700,
+    action: "Sichtbarmachen Objekt: –Exposés, Anzeigen, Kampagnen und Plattform-Listings. Überwache Reichweite und Resonanz.",
+    details: "Sichtbarmachen Objekt: –Exposés, Anzeigen, Kampagnen und Plattform-Listings. Überwache Reichweite und Resonanz.",
+    duration: 3200,
     icon: "🔍"
   },
   {
-    id: 21,
+    id: 18,
     agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "doing",
-    action: "Implementiere Marktpräsenz",
-    details: "Die Flächen sind am Markt platziert, mit gezielter Sichtbarkeit für die Zielgruppen. Ergebnisse fließen zurück an die Akquise-Agenten.",
-    duration: 2900,
+    action: "Flächen am Markt platziert, Sichtbarkeit für Zielgruppen. Ergebnisse Rückfluss an Akquise-Agenten.",
+    details: "Flächen am Markt platziert, Sichtbarkeit für Zielgruppen. Ergebnisse Rückfluss an Akquise-Agenten.",
+    duration: 2600,
     icon: "📊"
   },
 
   // 11. Abschlussmanagement- & Dokumentationsagent
   {
-    id: 22,
+    id: 19,
     agent: "Abschlussmanagement- & Dokumentationsagent",
     type: "thinking",
-    action: "Orchestriere Vertragsverhandlungen",
-    details: "Ich organisiere die Verhandlungen, halte die Pipeline aktuell, koordiniere Freigaben und steuere den Vertragsprozess bis zur Unterschrift.",
-    duration: 3900,
+    action: "Organisation der Verhandlungen, Aktualisierung Pipeline, Koordination Freigaben und Steuerung Vertragsprozess bis Unterschrift.",
+    details: "Organisation der Verhandlungen, Aktualisierung Pipeline, Koordination Freigaben und Steuerung Vertragsprozess bis Unterschrift.",
+    duration: 3600,
     icon: "🔍"
   },
   {
-    id: 23,
+    id: 20,
     agent: "Abschlussmanagement- & Dokumentationsagent",
     type: "doing",
-    action: "Finalisiere Vertragsabschlüsse",
-    details: "Der Abschluss ist dokumentiert, alle Schritte sind nachverfolgbar, und die Übergabe ins Facility Management ist vorbereitet.",
-    duration: 3000,
+    action: "Abschluss ist dokumentiert, Schritte nachverfolgbar, Übergabe ins Facility Management vorbereitet.",
+    details: "Abschluss ist dokumentiert, Schritte nachverfolgbar, Übergabe ins Facility Management vorbereitet.",
+    duration: 2800,
+    icon: "📊"
+  },
+
+  // 12. Interaktionsagent (Final)
+  {
+    id: 21,
+    agent: "Interaktionsagent",
+    type: "doing",
+    action: "Neuvermietungsanalyse erfolgreich durchgeführt",
+    details: "📊 Neuvermietungsanalyse erfolgreich durchgeführt. Soll ich für die Mieter der Kategorie B und C die nächsten Schritte automatisiert einleiten?",
+    duration: 2000,
     icon: "📊"
   }
 ];

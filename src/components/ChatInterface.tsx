@@ -263,6 +263,35 @@ export function ChatInterface({
         };
         setMessages(prev => [...prev, agentMessage]);
       }
+
+      // Add document notifications after specific steps
+      if (step.id === 2) {
+        // After Mietvertrags-Analyseagent doing step
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const excelDocument: Message = {
+          id: `doc-${Date.now()}`,
+          type: 'document',
+          content: `📊 Mietvertragsmatrix wurde erfolgreich erstellt und steht zur Analyse bereit.`,
+          timestamp: new Date(),
+          documentName: "BadHomburg_Mietvertragsmatrix.xlsx",
+          documentUrl: undefined
+        };
+        setMessages(prev => [...prev, excelDocument]);
+      }
+
+      if (step.id === 4) {
+        // After Interaktions & Datenerhebungsagent thinking step
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const kontaktDocument: Message = {
+          id: `doc-${Date.now()}`,
+          type: 'document',
+          content: `📋 Interaktions- & Kontaktliste wurde erstellt und ist einsatzbereit.`,
+          timestamp: new Date(),
+          documentName: "BadHomburg_Kontaktliste_Terminplanung.xlsx",
+          documentUrl: undefined
+        };
+        setMessages(prev => [...prev, kontaktDocument]);
+      }
       scrollToBottom();
 
       // Wait for the step duration (except for user_prompt steps)
@@ -319,7 +348,7 @@ export function ChatInterface({
       const introMessage: Message = {
         id: Date.now().toString() + "_intro",
         type: "assistant",
-        content: "Initialisiere Multi-Agent-System\n\n🔄 Starte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
+        content: "Initialisiere Multi-Agent-System 🔄\n\nStarte umfassende Neuvermietungsanalyse für Bad Homburg. Die Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
         timestamp: new Date(),
         agentType: "thinking"
       };
