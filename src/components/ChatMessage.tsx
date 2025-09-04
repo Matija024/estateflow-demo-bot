@@ -21,6 +21,8 @@ interface ChatMessageProps {
     sources?: Source[];
     thinking?: string[];
     agentSteps?: AgentStep[];
+    isAgentStep?: boolean;
+    agentType?: 'thinking' | 'doing';
   };
 }
 
@@ -39,15 +41,21 @@ export function ChatMessage({ message }: ChatMessageProps) {
     <div className={cn("flex gap-3 mb-6", isUser && "flex-row-reverse")}>
       <div className={cn(
         "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
-        isUser ? "bg-estate-purple text-white" : "bg-estate-purple-light text-estate-purple-dark"
+        isUser ? "bg-estate-purple text-white" : 
+        message.isAgentStep ? (message.agentType === 'thinking' ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600") :
+        "bg-estate-purple-light text-estate-purple-dark"
       )}>
-        {isUser ? <User size={16} /> : <Bot size={16} />}
+        {isUser ? <User size={16} /> : 
+         message.isAgentStep ? (message.agentType === 'thinking' ? '🟢' : '🔵') :
+         <Bot size={16} />}
       </div>
       
       <div className={cn("flex-1 max-w-3xl", isUser && "flex justify-end")}>
         <Card className={cn(
           "p-4 shadow-card transition-smooth",
-          isUser ? "bg-estate-purple text-white" : "bg-estate-bg-secondary border-estate-border"
+          isUser ? "bg-estate-purple text-white" : 
+          message.isAgentStep ? (message.agentType === 'thinking' ? "bg-green-50 border-green-200" : "bg-blue-50 border-blue-200") :
+          "bg-estate-bg-secondary border-estate-border"
         )}>
           {!isUser && message.thinking && (
             <div className="mb-3 text-sm text-estate-text-secondary italic">
@@ -91,7 +99,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
           
           <div className={cn(
             "text-sm leading-relaxed",
-            isUser ? "text-white" : "text-estate-text-primary"
+            isUser ? "text-white" : 
+            message.isAgentStep ? (message.agentType === 'thinking' ? "text-green-800" : "text-blue-800") :
+            "text-estate-text-primary"
           )}>
             {message.content}
           </div>

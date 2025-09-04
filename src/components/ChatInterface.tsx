@@ -6,7 +6,7 @@ import { Send } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { getHardcodedAnswer } from "@/lib/hardcoded/answers";
 import { supabase } from "@/integrations/supabase/client";
-import { runMultiAgentProcess, AgentStep } from "@/lib/multi-agent-process";
+import { runMultiAgentProcess, AgentStep, BAD_HOMBURG_PROCESS } from "@/lib/multi-agent-process";
 
 interface Message {
   id: string;
@@ -20,6 +20,8 @@ interface Message {
   }>;
   thinking?: string[];
   agentSteps?: AgentStep[];
+  isAgentStep?: boolean;
+  agentType?: 'thinking' | 'doing';
 }
 interface ChatInterfaceProps {
   selectedDocuments: string[];
@@ -49,24 +51,28 @@ export function ChatInterface({
     setCurrentThinking(null);
   };
 
-  const simulateMultiAgentProcess = async (): Promise<AgentStep[]> => {
-    const steps: AgentStep[] = [];
+  const simulateMultiAgentProcess = async (): Promise<void> => {
     setIsMultiAgentProcessRunning(true);
     
-    return new Promise((resolve) => {
-      runMultiAgentProcess(
-        (step: AgentStep) => {
-          setCurrentAgentStep(step);
-          steps.push(step);
-          scrollToBottom();
-        },
-        () => {
-          setIsMultiAgentProcessRunning(false);
-          setCurrentAgentStep(null);
-          resolve(steps);
-        }
-      );
-    });
+    for (const step of BAD_HOMBURG_PROCESS) {
+      // Add each agent step as a separate message
+      const agentMessage: Message = {
+        id: `agent-${step.id}-${Date.now()}`,
+        type: 'assistant',
+        content: `**${step.agent}**\n\n${step.type === 'thinking' ? '🟢 Denkt...' : '🔵 Macht...'} ${step.action}\n\n${step.details}`,
+        timestamp: new Date(),
+        isAgentStep: true,
+        agentType: step.type
+      };
+      
+      setMessages(prev => [...prev, agentMessage]);
+      scrollToBottom();
+      
+      // Wait for the step duration
+      await new Promise(resolve => setTimeout(resolve, step.duration));
+    }
+    
+    setIsMultiAgentProcessRunning(false);
   };
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
@@ -89,16 +95,16 @@ export function ChatInterface({
       
       if (isBadHomburgProcess) {
         // Run multi-agent process
-        const agentSteps = await simulateMultiAgentProcess();
+        await simulateMultiAgentProcess();
         
+        // Add final summary message
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           type: 'assistant',
           content: hardcodedAnswer.answer,
           timestamp: new Date(),
           sources: hardcodedAnswer.sources,
-          thinking: hardcodedAnswer.thinkingSequence,
-          agentSteps: agentSteps
+          thinking: hardcodedAnswer.thinkingSequence
         };
         
         setMessages(prev => [...prev, assistantMessage]);
@@ -204,23 +210,6 @@ export function ChatInterface({
                 <Card className="flex-1 max-w-3xl p-4 bg-estate-bg-secondary border-estate-border">
                   <div className="text-sm text-estate-text-secondary italic">
                     💭 {currentThinking[currentThinking.length - 1]}
-                  </div>
-                </Card>
-              </div>}
-
-            {currentAgentStep && <div className="flex gap-3 mb-6">
-                <div className="w-8 h-8 rounded-full bg-estate-purple-light text-estate-purple-dark flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm">{currentAgentStep.icon}</span>
-                </div>
-                <Card className="flex-1 max-w-3xl p-4 bg-estate-bg-secondary border-estate-border">
-                  <div className="text-sm font-medium text-estate-text-primary mb-2">
-                    🤖 {currentAgentStep.agent}
-                  </div>
-                  <div className="text-sm font-medium text-estate-text-primary mb-1">
-                    {currentAgentStep.type === 'thinking' ? 'Denkt...' : 'Macht...'} {currentAgentStep.action}
-                  </div>
-                  <div className="text-sm text-estate-text-secondary">
-                    {currentAgentStep.details}
                   </div>
                 </Card>
               </div>}
