@@ -211,18 +211,6 @@ export function ChatInterface({
         
         // Run multi-agent process
         await simulateMultiAgentProcess();
-        
-        // Add final summary message
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          type: 'assistant',
-          content: hardcodedAnswer.answer,
-          timestamp: new Date(),
-          sources: hardcodedAnswer.sources,
-          thinking: hardcodedAnswer.thinkingSequence
-        };
-        
-        setMessages(prev => [...prev, assistantMessage]);
       } else {
         // Regular thinking sequence
         const thinkingSequence = hardcodedAnswer.thinkingSequence || ["Denke nach..."];
@@ -336,14 +324,6 @@ export function ChatInterface({
       {/* Input Area - Always visible when messages exist */}
       {messages.length > 0 && <div className="border-t border-estate-border bg-estate-bg-secondary px-6 py-4">
           <div className="max-w-4xl mx-auto">
-            {awaitingUserResponse && currentUserPrompt && (
-              <div className="mb-4 p-3 bg-estate-accent/10 border border-estate-accent/20 rounded-lg">
-                <p className="text-sm text-estate-text-secondary mb-2">
-                  💬 <strong>Benutzerabfrage:</strong>
-                </p>
-                <p className="text-estate-text-primary">{currentUserPrompt}</p>
-              </div>
-            )}
             
             <div className="flex gap-3">
               <Input 
