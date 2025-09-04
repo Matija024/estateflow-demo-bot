@@ -7,7 +7,6 @@ import { ChatMessage } from "./ChatMessage";
 import { getHardcodedAnswer } from "@/lib/hardcoded/answers";
 import { supabase } from "@/integrations/supabase/client";
 import { runMultiAgentProcess, AgentStep, BAD_HOMBURG_PROCESS } from "@/lib/multi-agent-process";
-
 interface Message {
   id: string;
   type: 'user' | 'assistant';
@@ -32,7 +31,6 @@ export function ChatInterface({
   selectedDocuments,
   onReset
 }: ChatInterfaceProps) {
-  
   // Reset function to clear chat messages
   const resetChat = () => {
     setMessages([]);
@@ -78,21 +76,18 @@ export function ChatInterface({
     }
     setCurrentThinking(null);
   };
-
   const simulateMultiAgentProcess = async (): Promise<void> => {
     setIsMultiAgentProcessRunning(true);
-    
     const startIndex = pausedStepIndex !== null ? pausedStepIndex : 0;
-    
     for (let i = startIndex; i < BAD_HOMBURG_PROCESS.length; i++) {
       const step = BAD_HOMBURG_PROCESS[i];
-      
+
       // Handle steps with user input (including merged doing+user_prompt steps)
       if (step.requiresUserInput) {
         setAwaitingUserResponse(true);
         setCurrentUserPrompt(step.userPrompt || "Bitte geben Sie Ihre Antwort ein.");
         setPausedStepIndex(i + 1); // Resume from next step
-        
+
         // For merged steps, show the full content including the user prompt
         const stepContent = `${step.agent}\n\n${step.icon} ${step.details}`;
         const agentMessage: Message = {
@@ -124,7 +119,6 @@ export function ChatInterface({
       } else {
         // Regular agent step processing - clean formatting with agent name on separate line
         const stepContent = `${step.agent}\n\n${step.icon} ${step.details}`;
-        
         const agentMessage: Message = {
           id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
@@ -133,21 +127,18 @@ export function ChatInterface({
           isAgentStep: true,
           agentType: step.type
         };
-        
         setMessages(prev => [...prev, agentMessage]);
       }
-      
       scrollToBottom();
-      
+
       // Wait for the step duration (except for user_prompt steps)
       if (step.type !== 'user_prompt') {
         await new Promise(resolve => setTimeout(resolve, step.duration));
       }
     }
-    
     setIsMultiAgentProcessRunning(false);
     setPausedStepIndex(null);
-    
+
     // Add completion message
     const completionMessage: Message = {
       id: `completion-${Date.now()}`,
@@ -160,7 +151,6 @@ export function ChatInterface({
   };
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
-    
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -169,29 +159,26 @@ export function ChatInterface({
     };
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
-    
+
     // Handle user response to agent prompt
     if (awaitingUserResponse && currentUserPrompt) {
       setUserResponse(content);
       setAwaitingUserResponse(false);
       setCurrentUserPrompt(null);
-      
+
       // Resume the multi-agent process after a short delay
       setTimeout(() => {
         simulateMultiAgentProcess();
       }, 500);
       return;
     }
-    
     setIsLoading(true);
 
     // Try to get hardcoded answer first
     const hardcodedAnswer = getHardcodedAnswer(content);
     if (hardcodedAnswer) {
       // Check if this is the Bad Homburg process
-      const isBadHomburgProcess = content.toLowerCase().includes("neuvermietungsbedarf") && 
-                                  content.toLowerCase().includes("bad homburg");
-      
+      const isBadHomburgProcess = content.toLowerCase().includes("neuvermietungsbedarf") && content.toLowerCase().includes("bad homburg");
       if (isBadHomburgProcess) {
         // Add introductory message
         const introMessage: Message = {
@@ -201,22 +188,19 @@ export function ChatInterface({
           timestamp: new Date(),
           agentType: "thinking"
         };
-
         setMessages(prev => [...prev, introMessage]);
         setIsLoading(true);
 
         // Small delay before starting the process
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
         setIsLoading(false);
-        
+
         // Run multi-agent process
         await simulateMultiAgentProcess();
       } else {
         // Regular thinking sequence
         const thinkingSequence = hardcodedAnswer.thinkingSequence || ["Denke nach..."];
         await simulateThinkingSequence(thinkingSequence);
-        
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
           type: 'assistant',
@@ -225,7 +209,6 @@ export function ChatInterface({
           sources: hardcodedAnswer.sources,
           thinking: thinkingSequence
         };
-        
         setMessages(prev => [...prev, assistantMessage]);
       }
     } else {
@@ -284,9 +267,7 @@ export function ChatInterface({
         {messages.length === 0 ? <div className="flex flex-col items-center justify-center h-full max-w-4xl mx-auto">
             <div className="text-center mb-8">
               <h1 className="text-2xl font-semibold text-estate-text-primary mb-2">Willkommen bei Prism</h1>
-              <p className="text-estate-text-secondary">
-                Stellen Sie Fragen zu Ihren Immobiliendokumenten
-              </p>
+              <p className="text-estate-text-secondary">Stelle Fragen zu deinen Immobilien</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl mb-8">
@@ -327,25 +308,8 @@ export function ChatInterface({
           <div className="max-w-4xl mx-auto">
             
             <div className="flex gap-3">
-              <Input 
-                value={inputValue} 
-                onChange={e => setInputValue(e.target.value)} 
-                onKeyPress={handleKeyPress} 
-                placeholder={
-                  awaitingUserResponse 
-                    ? "Ihre Antwort eingeben..." 
-                    : isMultiAgentProcessRunning 
-                      ? "Multi-Agent-Prozess läuft..." 
-                      : "Nachricht eingeben..."
-                } 
-                disabled={isLoading || (isMultiAgentProcessRunning && !awaitingUserResponse)} 
-                className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" 
-              />
-              <Button 
-                onClick={() => handleSendMessage(inputValue)} 
-                disabled={!inputValue.trim() || isLoading || (isMultiAgentProcessRunning && !awaitingUserResponse)} 
-                className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4"
-              >
+              <Input value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder={awaitingUserResponse ? "Ihre Antwort eingeben..." : isMultiAgentProcessRunning ? "Multi-Agent-Prozess läuft..." : "Nachricht eingeben..."} disabled={isLoading || isMultiAgentProcessRunning && !awaitingUserResponse} className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" />
+              <Button onClick={() => handleSendMessage(inputValue)} disabled={!inputValue.trim() || isLoading || isMultiAgentProcessRunning && !awaitingUserResponse} className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4">
                 {isLoading ? "..." : awaitingUserResponse ? "Antworten" : <Send size={16} />}
               </Button>
             </div>
