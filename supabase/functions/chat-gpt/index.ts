@@ -41,7 +41,7 @@ Am Ende fasse das Endergebnis in 2–3 Sätzen zusammen – was liegt dem Asset 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: message }
