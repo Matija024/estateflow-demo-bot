@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Upload, FileText, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { Upload, FileText, Calendar, ChevronLeft, ChevronRight, Link, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 interface Document {
   id: string;
   name: string;
@@ -16,18 +18,29 @@ interface DocumentSidebarProps {
   documents: Document[];
   onDocumentSelect: (docId: string, selected: boolean) => void;
   onUpload: (files: FileList) => void;
+  onSystemConnect: (systemName: string) => void;
 }
 export function DocumentSidebar({
   documents,
   onDocumentSelect,
-  onUpload
+  onUpload,
+  onSystemConnect
 }: DocumentSidebarProps) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const { toast } = useToast();
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       onUpload(files);
     }
+  };
+
+  const handleSystemConnect = (systemName: string) => {
+    toast({
+      title: "System-Integration",
+      description: `Verbinde zu ${systemName}...`,
+    });
+    onSystemConnect(systemName);
   };
   return <div className={cn("bg-estate-bg-secondary border-r border-estate-border flex flex-col h-full transition-all duration-300", isExpanded ? "w-80" : "w-16")}>
       <div className="p-4 border-b border-estate-border">
@@ -86,6 +99,36 @@ export function DocumentSidebar({
                   </div>
                 </Card>)}
             </div>}
+        </div>}
+
+      {isExpanded && <div className="border-t border-estate-border p-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="w-full bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button">
+                <Link size={16} className="mr-2" />
+                System verbinden
+                <ChevronDown size={16} className="ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="center">
+              <DropdownMenuItem onClick={() => handleSystemConnect("SAP Immobilien-Management")}>
+                SAP Immobilien-Management
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSystemConnect("Microsoft Dynamics 365")}>
+                Microsoft Dynamics 365
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSystemConnect("Salesforce Property Cloud")}>
+                Salesforce Property Cloud
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSystemConnect("Propstack Verwaltung")}>
+                Propstack Verwaltung
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleSystemConnect("Andere Systeme")}>
+                Andere Systeme...
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>}
     </div>;
 }

@@ -32,6 +32,11 @@ const Index = () => {
     setDocuments(prev => [...prev, ...newDocs]);
   };
 
+  const handleSystemConnect = (systemName: string) => {
+    console.log('Connecting to system:', systemName);
+    // Future: Implement actual system integration logic
+  };
+
   const selectedDocuments = documents.filter(doc => doc.selected).map(doc => doc.id);
 
   return (
@@ -42,6 +47,7 @@ const Index = () => {
           documents={documents}
           onDocumentSelect={handleDocumentSelect}
           onUpload={handleUpload}
+          onSystemConnect={handleSystemConnect}
         />
         <div className="flex-1">
           <ChatInterface selectedDocuments={selectedDocuments} />
