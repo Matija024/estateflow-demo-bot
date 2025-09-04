@@ -66,35 +66,26 @@ export function Header() {
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="" alt="Max" />
                   <AvatarFallback className="bg-estate-purple text-primary-foreground">
-                    <User className="h-4 w-4" />
+                    JW
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-sm font-medium text-estate-text-primary">Max</span>
+                <span className="text-sm font-medium text-estate-text-primary">Joachim</span>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-64" align="end">
               <DropdownMenuLabel className="pb-2">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">Max Mustermann</p>
+                  <p className="text-sm font-medium leading-none">Joachim Wintzer</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem disabled>
                 <div className="flex flex-col space-y-1 w-full">
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">Rolle:</span>
-                    <span className="text-xs">EDGE, Geschäftsführer</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-xs text-muted-foreground">Letzter Login:</span>
-                    <span className="text-xs">Heute, 09:42 Uhr</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-muted-foreground">Status:</span>
-                    <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-xs">Online</span>
-                    </div>
+                  <div className="text-xs">Managing Director, EDGE</div>
+                  <div className="text-xs text-muted-foreground">Heute, 09:42 Uhr</div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-xs">Online</span>
                   </div>
                 </div>
               </DropdownMenuItem>
