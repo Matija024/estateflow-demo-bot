@@ -95,9 +95,9 @@ export function ChatInterface({
         
         // Add the user prompt message
         const promptMessage: Message = {
-          id: `agent-${step.id}-${Date.now()}`,
+          id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
-          content: `❓ **${step.agent}**\n\n${step.details}`,
+          content: `❓ **System**\n\n${step.details}`,
           timestamp: new Date(),
           isAgentStep: true,
           agentType: 'user_prompt'
@@ -109,9 +109,9 @@ export function ChatInterface({
 
       // Handle confirmation step (uses user response)
       if (step.type === 'confirmation' && userResponse) {
-        const confirmationContent = `✅ **${step.agent}**\n\n${step.details}\n\n*Ihre Antwort: "${userResponse}"*`;
+        const confirmationContent = `✅ **System**\n\n${step.details}\n\n*Ihre Antwort: "${userResponse}"*`;
         const confirmationMessage: Message = {
-          id: `agent-${step.id}-${Date.now()}`,
+          id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
           content: confirmationContent,
           timestamp: new Date(),
@@ -121,16 +121,11 @@ export function ChatInterface({
         setMessages(prev => [...prev, confirmationMessage]);
         setUserResponse(null); // Clear after using
       } else {
-        // Regular step processing
-        let stepContent = `**${step.agent}**\n\n${step.icon} ${step.type === 'thinking' ? 'Denkt...' : 'Macht...'} ${step.action}\n\n${step.details}`;
-        
-        // For steps after confirmation, integrate user response context
-        if (userResponse && i > 8) {
-          stepContent += `\n\n*Berücksichtigt User-Präferenzen basierend auf vorheriger Eingabe*`;
-        }
+        // Regular agent step processing - simplified display
+        const stepContent = `👤 **${step.agent}**\n\n${step.icon} ${step.details}`;
         
         const agentMessage: Message = {
-          id: `agent-${step.id}-${Date.now()}`,
+          id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
           content: stepContent,
           timestamp: new Date(),
