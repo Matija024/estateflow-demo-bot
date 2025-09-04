@@ -363,8 +363,7 @@ export function ChatInterface({
           type: 'assistant',
           content: hardcodedAnswer.answer,
           timestamp: new Date(),
-          sources: hardcodedAnswer.sources,
-          thinking: thinkingSequence
+          sources: hardcodedAnswer.sources
         };
         setMessages(prev => [...prev, assistantMessage]);
       } else {
@@ -398,8 +397,7 @@ export function ChatInterface({
             type: 'assistant',
             content: data.response || "Entschuldigung, ich konnte keine Antwort generieren.",
             timestamp: new Date(),
-            sources: sources,
-            thinking: thinkingSequence
+            sources: sources
           };
           setMessages(prev => [...prev, assistantMessage]);
         } catch (error) {
@@ -408,8 +406,7 @@ export function ChatInterface({
             id: (Date.now() + 1).toString(),
             type: 'assistant',
             content: "Entschuldigung, es gab einen Fehler beim Verbinden mit ChatGPT. Bitte versuchen Sie es erneut.",
-            timestamp: new Date(),
-            thinking: thinkingSequence
+            timestamp: new Date()
           };
           setMessages(prev => [...prev, errorMessage]);
         }
