@@ -279,7 +279,7 @@ export function ChatInterface({
             {/* Input field for custom questions */}
             <div className="w-full max-w-2xl">
               <div className="flex gap-3">
-                <Input value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder="Oder stellen Sie eine eigene Frage..." disabled={isLoading} className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" />
+                <Input value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder="Oder stelle eine eigene Frage..." disabled={isLoading} className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" />
                 <Button onClick={() => handleSendMessage(inputValue)} disabled={!inputValue.trim() || isLoading} className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4">
                   <Send size={16} />
                 </Button>
