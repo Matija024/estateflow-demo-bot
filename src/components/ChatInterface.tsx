@@ -21,7 +21,7 @@ interface Message {
 interface ChatInterfaceProps {
   selectedDocuments: string[];
 }
-const STARTER_QUESTIONS = ["Gib mir einen Überblick zur Immobilie", "Erstelle einen groben Geschäftsplan", "Was steht in Mietvertrag?", "Welche Risiken gibt es?"];
+const STARTER_QUESTIONS = ["Gib mir einen Überblick zur Immobilie", "Erstelle einen groben Geschäftsplan", "Welche Mietverträge, die ich betreue, enden in den nächsten 9 Monaten?", "Welche Risiken gibt es?"];
 export function ChatInterface({
   selectedDocuments
 }: ChatInterfaceProps) {
