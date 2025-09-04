@@ -137,7 +137,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           )}
           
           <div className={cn(
-            "text-sm leading-relaxed",
+            "text-sm leading-relaxed whitespace-pre-wrap",
             isUser ? "text-white" : 
             isDocument ? "text-blue-800" :
             message.isAgentStep ? getTextStyle(message.agentType) :

@@ -274,7 +274,7 @@ export function ChatInterface({
           content: `📊 Mietvertragsmatrix wurde erfolgreich erstellt und steht zur Analyse bereit.`,
           timestamp: new Date(),
           documentName: "BadHomburg_Mietvertragsmatrix.xlsx",
-          documentUrl: undefined
+          documentUrl: "#mietvertragsmatrix"
         };
         setMessages(prev => [...prev, excelDocument]);
       }
@@ -288,7 +288,7 @@ export function ChatInterface({
           content: `📋 Interaktions- & Kontaktliste wurde erstellt und ist einsatzbereit.`,
           timestamp: new Date(),
           documentName: "BadHomburg_Kontaktliste_Terminplanung.xlsx",
-          documentUrl: undefined
+          documentUrl: "#kontaktliste"
         };
         setMessages(prev => [...prev, kontaktDocument]);
       }
@@ -301,16 +301,6 @@ export function ChatInterface({
     }
     setIsMultiAgentProcessRunning(false);
     setPausedStepIndex(null);
-
-    // Add completion message
-    const completionMessage: Message = {
-      id: `completion-${Date.now()}`,
-      type: 'assistant',
-      content: "System\n\n✅ Multi-Agent-Analyse abgeschlossen\n\nDie umfassende Neuvermietungsanalyse wurde erfolgreich durchgeführt. Alle 11 Agenten haben ihre Aufgaben koordiniert abgearbeitet und strategische Empfehlungen entwickelt.",
-      timestamp: new Date(),
-      agentType: 'confirmation'
-    };
-    setMessages(prev => [...prev, completionMessage]);
   };
 
   const handleSendMessage = async (content: string) => {

@@ -158,8 +158,8 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     id: 15,
     agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "thinking",
-    action: "Steuere externe Makler: ?",
-    details: "Steuere externe Makler: ?",
+    action: "Steuere externe Makler und koordiniere Vertriebspartner",
+    details: "Steuere externe Makler und koordiniere Vertriebspartner",
     duration: 2800,
     icon: "🔍"
   },
