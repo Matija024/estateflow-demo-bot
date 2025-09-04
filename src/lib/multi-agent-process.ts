@@ -1,5 +1,5 @@
 // Helper function to generate random duration between 3 and 4 seconds
-const getRandomDuration = () => Math.floor(Math.random() * 1000) + 3000;
+const getRandomDuration = () => Math.floor(Math.random() * 1000) + 4000;
 
 export interface AgentStep {
   id: number;
