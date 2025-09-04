@@ -61,11 +61,15 @@ const answerPatterns: AnswerPattern[] = [
   {
     keywords: ["neuvermietungsbedarf", "bad homburg", "vermietung", "objekte", "leerstand"],
     answer: {
-      answer: "Für Ihre Objekte in Bad Homburg wird eine umfassende Multi-Agent-Analyse durchgeführt. Das System analysiert alle Mietverträge, identifiziert Kündigungsoptionen, segmentiert Mieter und entwickelt eine vollständige Neuvermietungsstrategie mit Markterschließung und Leadgenerierung.",
+      answer: "## 📊 **Analyse-Ergebnisse: Neuvermietungsbedarf Bad Homburg**\n\n**Kernerkenntnisse:**\n• **Leerstandsprognose:** 7.800 m² Gesamtleerstand identifiziert, finaler Leerstand 4,8% nach Neuvermietung\n• **Lead-Generierung:** 47 qualifizierte Interessenten generiert, 12 Besichtigungstermine vereinbart\n• **Mietersegmentierung:** 3 Hauptzielgruppen identifiziert mit spezifischen Ansprachestrategien\n• **Markterschließung:** Neue Vertriebskanäle erschlossen, Vermietungsgeschwindigkeit um 35% optimiert\n\n**Handlungsempfehlung:** Sofortige Umsetzung der Leadgenerierungs-Kampagne und Terminkoordinierung für die identifizierten Interessenten.",
       sources: [
+        { title: "SAP ERP - Mieterdatenbank", docId: "sap_system", page: 1 },
+        { title: "Propstack - Immobilien-Management", docId: "propstack_system", page: 1 },
         { title: "Vertragsmatrix_Q1.xlsx", docId: "doc_9", page: 1 },
         { title: "Mieter_Segmente_2025.xlsx", docId: "doc_10", page: 3 },
-        { title: "Vermietungs_Dashboard.pbix", docId: "doc_11", page: 1 }
+        { title: "OutreachTool - Leadgenerierung", docId: "outreach_system", page: 1 },
+        { title: "SurveyTool - Marktanalyse", docId: "survey_system", page: 1 },
+        { title: "MaklerCRM - Terminverwaltung", docId: "crm_system", page: 1 }
       ],
       thinkingSequence: ["Initialisiere Multi-Agent-System...", "Starte Vertragsanalyse...", "Beginne Mietersegmentierung..."]
     }

@@ -114,6 +114,23 @@ export function ChatInterface({
                                   content.toLowerCase().includes("bad homburg");
       
       if (isBadHomburgProcess) {
+        // Add introductory message
+        const introMessage: Message = {
+          id: Date.now().toString() + "_intro",
+          type: "assistant",
+          content: "🔄 **Starte umfassende Neuvermietungsanalyse für Bad Homburg**\n\nIch führe jetzt eine Multi-Agent-Analyse durch, die folgende Bereiche abdeckt:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
+          timestamp: new Date(),
+          agentType: "thinking"
+        };
+
+        setMessages(prev => [...prev, introMessage]);
+        setIsLoading(true);
+
+        // Small delay before starting the process
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        setIsLoading(false);
+        
         // Run multi-agent process
         await simulateMultiAgentProcess();
         
