@@ -21,7 +21,7 @@ interface Message {
   thinking?: string[];
   agentSteps?: AgentStep[];
   isAgentStep?: boolean;
-  agentType?: 'thinking' | 'doing';
+  agentType?: 'thinking' | 'doing' | 'confirmation' | 'user_prompt';
 }
 interface ChatInterfaceProps {
   selectedDocuments: string[];
@@ -41,6 +41,10 @@ export function ChatInterface({
     setCurrentThinking(null);
     setCurrentAgentStep(null);
     setIsMultiAgentProcessRunning(false);
+    setAwaitingUserResponse(false);
+    setCurrentUserPrompt(null);
+    setPausedStepIndex(null);
+    setUserResponse(null);
     onReset?.();
   };
 
@@ -56,6 +60,10 @@ export function ChatInterface({
   const [currentThinking, setCurrentThinking] = useState<string[] | null>(null);
   const [currentAgentStep, setCurrentAgentStep] = useState<AgentStep | null>(null);
   const [isMultiAgentProcessRunning, setIsMultiAgentProcessRunning] = useState(false);
+  const [awaitingUserResponse, setAwaitingUserResponse] = useState(false);
+  const [currentUserPrompt, setCurrentUserPrompt] = useState<string | null>(null);
+  const [pausedStepIndex, setPausedStepIndex] = useState<number | null>(null);
+  const [userResponse, setUserResponse] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
@@ -74,28 +82,89 @@ export function ChatInterface({
   const simulateMultiAgentProcess = async (): Promise<void> => {
     setIsMultiAgentProcessRunning(true);
     
-    for (const step of BAD_HOMBURG_PROCESS) {
-      // Add each agent step as a separate message
-      const agentMessage: Message = {
-        id: `agent-${step.id}-${Date.now()}`,
-        type: 'assistant',
-        content: `**${step.agent}**\n\n${step.type === 'thinking' ? '🟢 Denkt...' : '🔵 Macht...'} ${step.action}\n\n${step.details}`,
-        timestamp: new Date(),
-        isAgentStep: true,
-        agentType: step.type
-      };
+    const startIndex = pausedStepIndex !== null ? pausedStepIndex : 0;
+    
+    for (let i = startIndex; i < BAD_HOMBURG_PROCESS.length; i++) {
+      const step = BAD_HOMBURG_PROCESS[i];
       
-      setMessages(prev => [...prev, agentMessage]);
+      // Check if this step requires user input
+      if (step.requiresUserInput && step.type === 'user_prompt') {
+        setCurrentUserPrompt(step.userPrompt || step.details);
+        setAwaitingUserResponse(true);
+        setPausedStepIndex(i + 1); // Resume from next step
+        
+        // Add the user prompt message
+        const promptMessage: Message = {
+          id: `agent-${step.id}-${Date.now()}`,
+          type: 'assistant',
+          content: `❓ **${step.agent}**\n\n${step.details}`,
+          timestamp: new Date(),
+          isAgentStep: true,
+          agentType: 'user_prompt'
+        };
+        setMessages(prev => [...prev, promptMessage]);
+        scrollToBottom();
+        return; // Pause the process here
+      }
+
+      // Handle confirmation step (uses user response)
+      if (step.type === 'confirmation' && userResponse) {
+        const confirmationContent = `✅ **${step.agent}**\n\n${step.details}\n\n*Ihre Antwort: "${userResponse}"*`;
+        const confirmationMessage: Message = {
+          id: `agent-${step.id}-${Date.now()}`,
+          type: 'assistant',
+          content: confirmationContent,
+          timestamp: new Date(),
+          isAgentStep: true,
+          agentType: 'confirmation'
+        };
+        setMessages(prev => [...prev, confirmationMessage]);
+        setUserResponse(null); // Clear after using
+      } else {
+        // Regular step processing
+        let stepContent = `**${step.agent}**\n\n${step.icon} ${step.type === 'thinking' ? 'Denkt...' : 'Macht...'} ${step.action}\n\n${step.details}`;
+        
+        // For steps after confirmation, integrate user response context
+        if (userResponse && i > 8) {
+          stepContent += `\n\n*Berücksichtigt User-Präferenzen basierend auf vorheriger Eingabe*`;
+        }
+        
+        const agentMessage: Message = {
+          id: `agent-${step.id}-${Date.now()}`,
+          type: 'assistant',
+          content: stepContent,
+          timestamp: new Date(),
+          isAgentStep: true,
+          agentType: step.type
+        };
+        
+        setMessages(prev => [...prev, agentMessage]);
+      }
+      
       scrollToBottom();
       
-      // Wait for the step duration
-      await new Promise(resolve => setTimeout(resolve, step.duration));
+      // Wait for the step duration (except for user_prompt steps)
+      if (step.type !== 'user_prompt') {
+        await new Promise(resolve => setTimeout(resolve, step.duration));
+      }
     }
     
     setIsMultiAgentProcessRunning(false);
+    setPausedStepIndex(null);
+    
+    // Add completion message
+    const completionMessage: Message = {
+      id: `completion-${Date.now()}`,
+      type: 'assistant',
+      content: "✅ **Multi-Agent-Analyse abgeschlossen**\n\nDie umfassende Neuvermietungsanalyse wurde erfolgreich durchgeführt. Alle 11 Agenten haben ihre Aufgaben koordiniert abgearbeitet und strategische Empfehlungen entwickelt.",
+      timestamp: new Date(),
+      agentType: 'confirmation'
+    };
+    setMessages(prev => [...prev, completionMessage]);
   };
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
+    
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -104,6 +173,20 @@ export function ChatInterface({
     };
     setMessages(prev => [...prev, userMessage]);
     setInputValue("");
+    
+    // Handle user response to agent prompt
+    if (awaitingUserResponse && currentUserPrompt) {
+      setUserResponse(content);
+      setAwaitingUserResponse(false);
+      setCurrentUserPrompt(null);
+      
+      // Resume the multi-agent process after a short delay
+      setTimeout(() => {
+        simulateMultiAgentProcess();
+      }, 500);
+      return;
+    }
+    
     setIsLoading(true);
 
     // Try to get hardcoded answer first
@@ -258,10 +341,36 @@ export function ChatInterface({
       {/* Input Area - Always visible when messages exist */}
       {messages.length > 0 && <div className="border-t border-estate-border bg-estate-bg-secondary px-6 py-4">
           <div className="max-w-4xl mx-auto">
+            {awaitingUserResponse && currentUserPrompt && (
+              <div className="mb-4 p-3 bg-estate-accent/10 border border-estate-accent/20 rounded-lg">
+                <p className="text-sm text-estate-text-secondary mb-2">
+                  💬 <strong>Benutzerabfrage:</strong>
+                </p>
+                <p className="text-estate-text-primary">{currentUserPrompt}</p>
+              </div>
+            )}
+            
             <div className="flex gap-3">
-              <Input value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder="Nachricht eingeben..." disabled={isLoading} className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" />
-              <Button onClick={() => handleSendMessage(inputValue)} disabled={!inputValue.trim() || isLoading} className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4">
-                <Send size={16} />
+              <Input 
+                value={inputValue} 
+                onChange={e => setInputValue(e.target.value)} 
+                onKeyPress={handleKeyPress} 
+                placeholder={
+                  awaitingUserResponse 
+                    ? "Ihre Antwort eingeben..." 
+                    : isMultiAgentProcessRunning 
+                      ? "Multi-Agent-Prozess läuft..." 
+                      : "Nachricht eingeben..."
+                } 
+                disabled={isLoading || (isMultiAgentProcessRunning && !awaitingUserResponse)} 
+                className="flex-1 border-estate-border focus:ring-estate-purple focus:border-estate-purple" 
+              />
+              <Button 
+                onClick={() => handleSendMessage(inputValue)} 
+                disabled={!inputValue.trim() || isLoading || (isMultiAgentProcessRunning && !awaitingUserResponse)} 
+                className="bg-estate-purple hover:bg-estate-purple-dark text-white shadow-button px-4"
+              >
+                {isLoading ? "..." : awaitingUserResponse ? "Antworten" : <Send size={16} />}
               </Button>
             </div>
           </div>

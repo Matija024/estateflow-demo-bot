@@ -22,7 +22,7 @@ interface ChatMessageProps {
     thinking?: string[];
     agentSteps?: AgentStep[];
     isAgentStep?: boolean;
-    agentType?: 'thinking' | 'doing';
+    agentType?: 'thinking' | 'doing' | 'confirmation' | 'user_prompt';
   };
 }
 
@@ -35,6 +35,36 @@ export function ChatMessage({ message }: ChatMessageProps) {
     navigator.clipboard.writeText(message.content);
   };
 
+  const getAgentIcon = (agentType?: string) => {
+    switch (agentType) {
+      case 'thinking': return '🔍';
+      case 'doing': return '📊';
+      case 'confirmation': return '✅';
+      case 'user_prompt': return '❓';
+      default: return <Bot size={16} />;
+    }
+  };
+
+  const getAgentStyle = (agentType?: string) => {
+    switch (agentType) {
+      case 'thinking': return "bg-green-100 text-green-600 border-green-200";
+      case 'doing': return "bg-blue-100 text-blue-600 border-blue-200";
+      case 'confirmation': return "bg-emerald-100 text-emerald-600 border-emerald-200";
+      case 'user_prompt': return "bg-amber-100 text-amber-600 border-amber-200";
+      default: return "bg-estate-purple-light text-estate-purple-dark";
+    }
+  };
+
+  const getTextStyle = (agentType?: string) => {
+    switch (agentType) {
+      case 'thinking': return "text-green-800";
+      case 'doing': return "text-blue-800";
+      case 'confirmation': return "text-emerald-800";
+      case 'user_prompt': return "text-amber-800";
+      default: return "text-estate-text-primary";
+    }
+  };
+  
   const isUser = message.type === 'user';
 
   return (
@@ -42,11 +72,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div className={cn(
         "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
         isUser ? "bg-estate-purple text-white" : 
-        message.isAgentStep ? (message.agentType === 'thinking' ? "bg-green-100 text-green-600" : "bg-blue-100 text-blue-600") :
+        message.isAgentStep ? getAgentStyle(message.agentType) :
         "bg-estate-purple-light text-estate-purple-dark"
       )}>
         {isUser ? <User size={16} /> : 
-         message.isAgentStep ? (message.agentType === 'thinking' ? '🟢' : '🔵') :
+         message.isAgentStep ? getAgentIcon(message.agentType) :
          <Bot size={16} />}
       </div>
       
@@ -54,7 +84,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         <Card className={cn(
           "p-4 shadow-card transition-smooth",
           isUser ? "bg-estate-purple text-white" : 
-          message.isAgentStep ? (message.agentType === 'thinking' ? "bg-green-50 border-green-200" : "bg-blue-50 border-blue-200") :
+          message.isAgentStep ? getAgentStyle(message.agentType) :
           "bg-estate-bg-secondary border-estate-border"
         )}>
           {!isUser && message.thinking && (
@@ -100,7 +130,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <div className={cn(
             "text-sm leading-relaxed",
             isUser ? "text-white" : 
-            message.isAgentStep ? (message.agentType === 'thinking' ? "text-green-800" : "text-blue-800") :
+            message.isAgentStep ? getTextStyle(message.agentType) :
             "text-estate-text-primary"
           )}>
             {message.content}

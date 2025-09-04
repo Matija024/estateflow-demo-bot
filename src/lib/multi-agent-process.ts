@@ -1,220 +1,258 @@
 export interface AgentStep {
   id: number;
   agent: string;
-  type: 'thinking' | 'doing';
+  type: 'thinking' | 'doing' | 'confirmation' | 'user_prompt';
   action: string;
   details: string;
   duration: number; // milliseconds
   icon: string;
+  requiresUserInput?: boolean;
+  userPrompt?: string;
 }
 
 export const BAD_HOMBURG_PROCESS: AgentStep[] = [
+  // Mietvertrags-Analyseagent
   {
     id: 1,
-    agent: "Agent 1 – Mietvertrags-Analyseagent",
+    agent: "Mietvertrags-Analyseagent",
     type: "thinking",
-    action: "Analysiere Mietvertrag_Alpha_Tower_2019.pdf",
-    details: "Extrahiert Laufzeit, Miete und Sonderkündigungsrechte",
-    duration: 3000,
-    icon: "🟢"
+    action: "Öffne Datenquellen – CAFM, ERP, Vertragsdatenbank",
+    details: "Ziehe alle Mietverträge in einheitliches Schema. Erkenne Kündigungsfristen, Restlaufzeiten und potenzielle Risiken.",
+    duration: 3200,
+    icon: "🔍"
   },
   {
     id: 2,
-    agent: "Agent 1 – Mietvertrags-Analyseagent",
+    agent: "Mietvertrags-Analyseagent", 
     type: "doing",
-    action: "Markiere 12 Verträge mit Kündigungsoptionen",
-    details: "Kündigungsoptionen < 12 Monate in Vertragsmatrix_Q1.xlsx",
-    duration: 2500,
-    icon: "🔵"
+    action: "Erstelle Vertragsmatrix",
+    details: "Vertragsmatrix erstellt – alle Mieter, Flächen, Laufzeiten und Risikolevel dokumentiert. Übergabe an Kategorisierungsagent.",
+    duration: 2800,
+    icon: "📊"
   },
+
+  // Kategorisierungs- & Priorisierungsagent
   {
     id: 3,
-    agent: "Agent 1B – Kategorisierungs- & Priorisierungsagent",
-    type: "thinking",
-    action: "Prüfe Matrix mit 87 Mietern gegen Portfolio-Regeln",
-    details: "Vergleicht Flächenkategorien und nutzt Daten von Agent 1",
+    agent: "Kategorisierungs- & Priorisierungsagent",
+    type: "thinking", 
+    action: "Bewerte jeden Mieter nach Größe und Risiko",
+    details: "Nehme Vertragsmatrix und bewerte jeden Mieter: groß, mittel, klein – und wie riskant der Vertrag ist. Leite A-, B- und C-Mieter ab.",
     duration: 3500,
-    icon: "🟢"
+    icon: "🔍"
   },
   {
     id: 4,
-    agent: "Agent 1B – Kategorisierungs- & Priorisierungsagent",
+    agent: "Kategorisierungs- & Priorisierungsagent",
     type: "doing",
-    action: "Segmentiere Mieter in Kategorien A, B, C",
-    details: "23 Mieter in A, 42 in B und 22 in C → Mieter_Segmente_2025.xlsx",
-    duration: 2800,
-    icon: "🔵"
+    action: "Segmentiere Mieter in Kategorien",
+    details: "Kategorisierung abgeschlossen: A-Mieter für persönliche Gespräche, B-Mieter für digitale Umfragen, C-Mieter nur Monitoring. Liste übergeben.",
+    duration: 2600,
+    icon: "📊"
   },
+
+  // Interaktions- & Datenerhebungsagent  
   {
     id: 5,
-    agent: "Agent 3 – Interaktions- & Datenerhebungsagent",
+    agent: "Interaktions- & Datenerhebungsagent",
     type: "thinking",
-    action: "Erstelle Fragenblöcke für A-Mieter",
-    details: "Entwickelt Umfragen für B- und C-Mieter basierend auf Segmentdaten",
-    duration: 3200,
-    icon: "🟢"
+    action: "Bereite zielgruppenspezifische Ansprache vor",
+    details: "Gehe Liste durch. Für A-Mieter bereite ich Gesprächsleitfäden vor und plane Termine. Für B-Mieter versende ich digitale Umfragen. Für C-Mieter schicke ich kurze Status-Formulare.",
+    duration: 3800,
+    icon: "🔍"
   },
   {
     id: 6,
-    agent: "Agent 3 – Interaktions- & Datenerhebungsagent",
-    type: "doing",
-    action: "Versende 65 personalisierte Umfrage-Links",
-    details: "Distribution via SurveyTool an alle Mieter-Segmente",
-    duration: 2600,
-    icon: "🔵"
+    agent: "Interaktions- & Datenerhebungsagent",
+    type: "doing", 
+    action: "Sammle Mietrückmeldungen",
+    details: "Rückmeldungen gesammelt: Flächenbedarf ermittelt – manche brauchen mehr, manche weniger, andere bleiben stabil. Daten bereit für Dashboard-Agent.",
+    duration: 3000,
+    icon: "📊"
   },
+
+  // Benutzerabfrage
   {
     id: 7,
-    agent: "Agent 3 – Interaktions- & Datenerhebungsagent",
-    type: "thinking",
-    action: "Verarbeite 41 Rückmeldungen",
-    details: "Analysiert Feedback: 3.200 m² Erweiterung bei Beta AG identifiziert",
-    duration: 4000,
-    icon: "🟢"
+    agent: "System",
+    type: "user_prompt",
+    action: "Benötige Ihre Eingabe",
+    details: "Möchten Sie die Ansprechpartner, Terminvorschläge und Gesprächsleitfäden für A-Mieter jetzt überprüfen?",
+    duration: 0,
+    icon: "❓",
+    requiresUserInput: true,
+    userPrompt: "Möchten Sie die Ansprechpartner, Terminvorschläge und Gesprächsleitfäden für A-Mieter jetzt überprüfen? (ja/nein)"
   },
+
+  // Bestätigungsnachricht
   {
     id: 8,
-    agent: "Agent 4 – Dashboard- & Auswertungsagent",
-    type: "doing",
-    action: "Konsolidiere Rückläufe in Dashboard",
-    details: "Vermietungs_Dashboard.pbix zeigt freie Flächen ab Juli: 12.500 m²",
-    duration: 3000,
-    icon: "🔵"
+    agent: "System", 
+    type: "confirmation",
+    action: "Verarbeite Benutzerantwort",
+    details: "Daten empfangen - arbeite nun mit den neuen Informationen weiter",
+    duration: 1500,
+    icon: "✅"
   },
+
+  // Dashboard- & Auswertungsagent
   {
     id: 9,
-    agent: "Agent 4 – Dashboard- & Auswertungsagent",
+    agent: "Dashboard- & Auswertungsagent",
     type: "thinking",
-    action: "Erstelle Leerstand-Forecast",
-    details: "Prognose: 7.800 m² Leerstand in Q3 basierend auf aktuellen Daten",
-    duration: 3500,
-    icon: "🟢"
+    action: "Konsolidiere alle Daten im Dashboard", 
+    details: "Spiele alle Daten ins Dashboard ein: Vertragsinfos, Rückmeldungen, Kategorien. Bereinige Formate und verknüpfe alles miteinander.",
+    duration: 3400,
+    icon: "🔍"
   },
   {
     id: 10,
-    agent: "Agent 5 – Entscheidungsagent",
-    type: "thinking",
-    action: "Simuliere Szenarien für Flächenmanagement",
-    details: "Bewerte Optionen: Verlängern, Freigeben, Neuvermieten",
-    duration: 4200,
-    icon: "🟢"
+    agent: "Dashboard- & Auswertungsagent",
+    type: "doing",
+    action: "Erstelle Übersicht mit Ampellogik",
+    details: "Dashboard zeigt Übersicht: alle Mieter, Bedarfe, Risiken und Forecasts in Ampellogik (rot/gelb/grün). Auswertung an Entscheidungsagent übergeben.",
+    duration: 2900,
+    icon: "📊"
   },
+
+  // Entscheidungsagent
   {
     id: 11,
-    agent: "Agent 5 – Entscheidungsagent",
-    type: "doing",
-    action: "Erstelle Maßnahmenplan für 18 Flächen",
-    details: "Konkrete Vorschläge in Maßnahmenplan_2025.docx dokumentiert",
-    duration: 2900,
-    icon: "🔵"
+    agent: "Entscheidungsagent",
+    type: "thinking", 
+    action: "Analysiere Handlungsoptionen",
+    details: "Prüfe Rückmeldungen und entscheide: Wer braucht ein Erweiterungsangebot? Wer kündigt bald und muss neu vermarktet werden? Wer will verlängern?",
+    duration: 4000,
+    icon: "🔍"
   },
   {
     id: 12,
-    agent: "Agent 6 – Firmenlistenagent",
-    type: "thinking",
-    action: "Recherchiere potenzielle Neumieter",
-    details: "Durchsucht Unternehmensregister_DE nach Firmen >200 Mitarbeitern",
-    duration: 3800,
-    icon: "🟢"
+    agent: "Entscheidungsagent",
+    type: "doing",
+    action: "Entwickle Maßnahmenpakete", 
+    details: "Konkrete Maßnahmenpakete abgeleitet und an Vermarktungs- und Neuakquise-Agenten übergeben. Strategische Empfehlungen dokumentiert.",
+    duration: 3200,
+    icon: "📊"
   },
+
+  // Firmenlistenagent
   {
     id: 13,
-    agent: "Agent 6 – Firmenlistenagent",
-    type: "doing",
-    action: "Erstelle Longlist mit 146 Firmen",
-    details: "Qualifizierte Unternehmen in Neumieter_Liste.xlsx erfasst",
-    duration: 2400,
-    icon: "🔵"
+    agent: "Firmenlistenagent",
+    type: "thinking",
+    action: "Durchsuche Unternehmensverzeichnisse",
+    details: "Scanne Branchen- und Firmenverzeichnisse in der Region. Suche Unternehmen mit der richtigen Größe, Branche und Nähe zum Standort.",
+    duration: 3600,
+    icon: "🔍"
   },
   {
     id: 14,
-    agent: "Agent 7 – Ansprechpartner-Identifikationsagent",
-    type: "thinking",
-    action: "Durchsuche LinkedIn-Profile und Handelsregister",
-    details: "Identifiziert Entscheidungsträger bei 146 Zielunternehmen",
-    duration: 5000,
-    icon: "🟢"
+    agent: "Firmenlistenagent", 
+    type: "doing",
+    action: "Erstelle qualifizierte Longlist",
+    details: "Longlist potenzieller Mieter erstellt – sortiert nach Relevanz. Liste mit Matching-Scores an Ansprechpartner-Identifikationsagent übergeben.",
+    duration: 2700,
+    icon: "📊"
   },
+
+  // Ansprechpartner-Identifikationsagent
   {
     id: 15,
-    agent: "Agent 7 – Ansprechpartner-Identifikationsagent",
-    type: "doing",
-    action: "Erfasse 278 Ansprechpartner",
-    details: "CFO Gamma GmbH und weitere in Kontaktmatrix.xlsx eingetragen",
-    duration: 3200,
-    icon: "🔵"
+    agent: "Ansprechpartner-Identifikationsagent",
+    type: "thinking",
+    action: "Recherchiere Entscheidungsträger", 
+    details: "Recherchiere gezielt die richtigen Personen in den Firmen – Geschäftsführer, Immobilienverantwortliche oder HR-Leiter. Prüfe Profile auf LinkedIn, Websites und CRM-Daten.",
+    duration: 4200,
+    icon: "🔍"
   },
   {
     id: 16,
-    agent: "Agent 8 – Ansprache- & Terminvereinbarungsagent",
-    type: "thinking",
-    action: "Entwickle 87 personalisierte Anschreiben",
-    details: "Bezugnahme auf individuelle Expansionspläne der Unternehmen",
-    duration: 4500,
-    icon: "🟢"
+    agent: "Ansprechpartner-Identifikationsagent",
+    type: "doing",
+    action: "Erstelle qualifizierte Kontaktliste",
+    details: "Kontaktliste mit Namen, Rollen und Matching Scores erstellt. Qualifizierte Ansprechpartner an Ansprache- & Terminvereinbarungsagent übergeben.",
+    duration: 3100,
+    icon: "📊"
   },
+
+  // Ansprache- & Terminvereinbarungsagent
   {
     id: 17,
-    agent: "Agent 8 – Ansprache- & Terminvereinbarungsagent",
-    type: "doing",
-    action: "Verschicke Nachrichten und vereinbare Termine",
-    details: "OutreachTool-Kampagne resultiert in 12 bestätigten Erstterminen",
-    duration: 3100,
-    icon: "🔵"
+    agent: "Ansprache- & Terminvereinbarungsagent", 
+    type: "thinking",
+    action: "Entwickle personalisierte Ansprache-Strategie",
+    details: "Kontaktiere priorisierte Ansprechpartner – per E-Mail, LinkedIn oder Telefon. Nutze personalisierte Textbausteine und erinnere automatisch nach.",
+    duration: 3800,
+    icon: "🔍"
   },
   {
     id: 18,
-    agent: "Agent 9 – Maklermanagement-Agent",
-    type: "doing",
-    action: "Beauftrage 3 externe Makler",
-    details: "Spezialflächen >1.500 m² an Experten vergeben, MaklerCRM synchronisiert",
-    duration: 2700,
-    icon: "🔵"
+    agent: "Ansprache- & Terminvereinbarungsagent",
+    type: "doing", 
+    action: "Vereinbare Ersttermine",
+    details: "Termine mit Interessenten vereinbart. Termine und qualifizierte Leads an Maklermanagement-Agent und Abschlussmanagement weitergeleitet.",
+    duration: 2800,
+    icon: "📊"
   },
+
+  // Maklermanagement- & Netzwerksteuerungsagent
   {
     id: 19,
-    agent: "Agent 10 – Marketingmaßnahmen-Agent",
+    agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "thinking",
-    action: "Analysiere Keywords und Suchvolumen",
-    details: "1.240 Suchanfragen für 'Bürofläche München' identifiziert",
-    duration: 3600,
-    icon: "🟢"
+    action: "Koordiniere externes Maklernetzwerk",
+    details: "Steuere externe Makler: Wer darf welche Fläche vermarkten, wie ist die Performance, wo gibt es Doppelansprachen? Vermeide Überschneidungen.",
+    duration: 3300,
+    icon: "🔍"
   },
   {
     id: 20,
-    agent: "Agent 10 – Marketingmaßnahmen-Agent",
+    agent: "Maklermanagement- & Netzwerksteuerungsagent", 
     type: "doing",
-    action: "Schalte Inserate auf Immobilienscout24",
-    details: "4 Anzeigen live, LinkedIn Ads erwarten 25.000 Impressions",
-    duration: 2800,
-    icon: "🔵"
+    action: "Optimiere Makler-Pipeline",
+    details: "Makler-Leads dokumentiert, Partner bewertet und qualifizierte Kontakte in Pipeline zurückgespielt. Performance-Tracking aktiviert.",
+    duration: 2600,
+    icon: "📊"
   },
+
+  // Marketingmaßnahmen- & Sichtbarkeitsagent  
   {
     id: 21,
-    agent: "Agent 11 – Abschlussmanagement-Agent",
+    agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "thinking",
-    action: "Prüfe Vertragsentwürfe gegen Standards",
-    details: "Mietvertrag_BetaAG_2025.docx mit Standardklauseln abgeglichen",
-    duration: 3400,
-    icon: "🟢"
+    action: "Entwickle umfassende Marketing-Strategie", 
+    details: "Mache Objekt sichtbar – mit Exposés, Anzeigen, Kampagnen und Plattform-Listings. Überwache Reichweite und Resonanz der Maßnahmen.",
+    duration: 3700,
+    icon: "🔍"
   },
   {
     id: 22,
-    agent: "Agent 11 – Abschlussmanagement-Agent",
+    agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "doing",
-    action: "Organisiere digitale Signatur",
-    details: "DocuSign-Prozess eingeleitet, Vertrag in DMS_Abschlüsse_2025 archiviert",
-    duration: 2500,
-    icon: "🔵"
+    action: "Implementiere Marktpräsenz", 
+    details: "Flächen am Markt platziert mit gezielter Sichtbarkeit für Zielgruppen. Kampagnen-Performance und Ergebnisse an Akquise-Agenten übertragen.",
+    duration: 2900,
+    icon: "📊"
   },
+
+  // Abschlussmanagement- & Dokumentationsagent
   {
     id: 23,
-    agent: "Agent 4 – Dashboard- & Auswertungsagent",
+    agent: "Abschlussmanagement- & Dokumentationsagent",
+    type: "thinking",
+    action: "Orchestriere Vertragsverhandlungen",
+    details: "Organisiere Verhandlungen, halte Pipeline aktuell, koordiniere Freigaben und steuere den Vertragsprozess bis zur Unterschrift.",
+    duration: 3900,
+    icon: "🔍"
+  },
+  {
+    id: 24,
+    agent: "Abschlussmanagement- & Dokumentationsagent",
     type: "doing",
-    action: "Aktualisiere Portfolio-Cockpit",
-    details: "Leerstand sinkt auf 4,8%, Quartalsbericht_Vermietung_Q2.pdf erstellt",
+    action: "Finalisiere Vertragsabschlüsse", 
+    details: "Abschluss dokumentiert, alle Schritte nachverfolgbar und Übergabe ins Facility Management vorbereitet. Multi-Agent-Prozess erfolgreich abgeschlossen.",
     duration: 3000,
-    icon: "🔵"
+    icon: "📊"
   }
 ];
 
