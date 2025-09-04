@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Copy, User, Bot } from "lucide-react";
+import { Copy, User, Bot, FileText, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { AgentStep } from "@/lib/multi-agent-process";
@@ -15,7 +15,7 @@ interface Source {
 interface ChatMessageProps {
   message: {
     id: string;
-    type: 'user' | 'assistant';
+    type: 'user' | 'assistant' | 'document';
     content: string;
     timestamp: Date;
     sources?: Source[];
@@ -23,6 +23,8 @@ interface ChatMessageProps {
     agentSteps?: AgentStep[];
     isAgentStep?: boolean;
     agentType?: 'thinking' | 'doing' | 'confirmation' | 'user_prompt';
+    documentName?: string;
+    documentUrl?: string;
   };
 }
 
@@ -66,16 +68,19 @@ export function ChatMessage({ message }: ChatMessageProps) {
   };
   
   const isUser = message.type === 'user';
+  const isDocument = message.type === 'document';
 
   return (
     <div className={cn("flex gap-3 mb-6", isUser && "flex-row-reverse")}>
       <div className={cn(
         "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
         isUser ? "bg-estate-purple text-white" : 
+        isDocument ? "bg-blue-100 text-blue-600" :
         message.isAgentStep ? getAgentStyle(message.agentType) :
         "bg-estate-purple-light text-estate-purple-dark"
       )}>
         {isUser ? <User size={16} /> : 
+         isDocument ? <FileText size={16} /> :
          message.isAgentStep ? getAgentIcon(message.agentType) :
          <Bot size={16} />}
       </div>
@@ -84,6 +89,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         <Card className={cn(
           "p-4 shadow-card transition-smooth",
           isUser ? "bg-estate-purple text-white" : 
+          isDocument ? "bg-blue-50 border-blue-200" :
           message.isAgentStep ? getAgentStyle(message.agentType) :
           "bg-estate-bg-secondary border-estate-border"
         )}>
@@ -130,13 +136,29 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <div className={cn(
             "text-sm leading-relaxed",
             isUser ? "text-white" : 
+            isDocument ? "text-blue-800" :
             message.isAgentStep ? getTextStyle(message.agentType) :
             "text-estate-text-primary"
           )}>
             {message.content}
           </div>
           
-          {!isUser && (
+          {/* Document download link */}
+          {isDocument && message.documentUrl && (
+            <div className="mt-3 pt-3 border-t border-blue-200">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(message.documentUrl, '_blank')}
+                className="h-8 px-3 text-sm text-blue-600 border-blue-300 hover:bg-blue-100"
+              >
+                <ExternalLink size={14} className="mr-2" />
+                Dokument öffnen
+              </Button>
+            </div>
+          )}
+          
+          {!isUser && !isDocument && (
             <div className="flex items-center justify-between mt-3 pt-3 border-t border-estate-border">
               <div className="flex items-center gap-2">
                 <Button
@@ -157,7 +179,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </div>
           )}
           
-          {message.sources && message.sources.length > 0 && (
+          {message.sources && message.sources.length > 0 && !isDocument && (
             <div className="mt-3 pt-3 border-t border-estate-border">
               <div className="text-xs text-estate-text-secondary mb-2">
                 Quellen:

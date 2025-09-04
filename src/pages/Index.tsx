@@ -9,6 +9,8 @@ interface Document {
   uploadDate: Date;
   type: string;
   selected: boolean;
+  file_path?: string;
+  download_url?: string;
 }
 
 const Index = () => {
@@ -57,7 +59,9 @@ const Index = () => {
         <div className="flex-1">
           <ChatInterface 
             key={chatKey}
-            selectedDocuments={selectedDocuments} 
+            selectedDocuments={selectedDocuments}
+            documents={documents}
+            onDocumentAdd={setDocuments}
           />
         </div>
       </div>
