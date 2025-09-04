@@ -267,7 +267,7 @@ export function ChatInterface({
       // Add document notifications after specific steps
       if (step.id === 2) {
         // After Mietvertrags-Analyseagent doing step
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 7000));
         const excelDocument: Message = {
           id: `doc-${Date.now()}`,
           type: 'document',
@@ -281,7 +281,7 @@ export function ChatInterface({
 
       if (step.id === 4) {
         // After Interaktions & Datenerhebungsagent thinking step
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 7000));
         const kontaktDocument: Message = {
           id: `doc-${Date.now()}`,
           type: 'document',
@@ -346,7 +346,7 @@ export function ChatInterface({
       setIsLoading(true);
 
       // Small delay before starting the process
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 7000));
       setIsLoading(false);
 
       // Run multi-agent process
