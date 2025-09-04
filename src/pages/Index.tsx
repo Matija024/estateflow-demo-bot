@@ -13,6 +13,11 @@ interface Document {
 
 const Index = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [chatKey, setChatKey] = useState(0);
+
+  const handleChatReset = () => {
+    setChatKey(prev => prev + 1);
+  };
   
   const handleDocumentSelect = (docId: string, selected: boolean) => {
     setDocuments(prev => prev.map(doc => 
@@ -41,7 +46,7 @@ const Index = () => {
 
   return (
     <div className="h-screen flex flex-col bg-estate-bg-primary">
-      <Header />
+      <Header onChatReset={handleChatReset} />
       <div className="flex flex-1 overflow-hidden">
         <DocumentSidebar 
           documents={documents}
@@ -50,7 +55,10 @@ const Index = () => {
           onSystemConnect={handleSystemConnect}
         />
         <div className="flex-1">
-          <ChatInterface selectedDocuments={selectedDocuments} />
+          <ChatInterface 
+            key={chatKey}
+            selectedDocuments={selectedDocuments} 
+          />
         </div>
       </div>
     </div>

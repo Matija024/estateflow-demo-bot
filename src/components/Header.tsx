@@ -1,5 +1,5 @@
 import estateflowLogo from "@/assets/estateflow-logo.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Lock, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -12,12 +12,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Header() {
+interface HeaderProps {
+  onChatReset?: () => void;
+}
+
+export function Header({ onChatReset }: HeaderProps) {
+  const navigate = useNavigate();
+
+  const handleLogoClick = () => {
+    navigate("/");
+    onChatReset?.();
+  };
   return (
     <header className="bg-estate-bg-secondary border-b border-estate-border px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Left side - Logo and Title */}
-        <div className="flex items-center gap-3">
+        <div 
+          className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+          onClick={handleLogoClick}
+        >
           <img src={estateflowLogo} alt="EstateFlow Logo" className="w-10 h-10 rounded-lg" />
           <h1 className="text-2xl font-bold text-estate-text-primary">Prism</h1>
         </div>
