@@ -57,6 +57,18 @@ const answerPatterns: AnswerPattern[] = [
       ],
       thinkingSequence: ["Suche Geschäftsplan-Vorlagen...", "Analysiere Finanzmodelle...", "Strukturiere Planungsvorlage..."]
     }
+  },
+  {
+    keywords: ["neuvermietungsbedarf", "bad homburg", "vermietung", "objekte", "leerstand"],
+    answer: {
+      answer: "Für Ihre Objekte in Bad Homburg wird eine umfassende Multi-Agent-Analyse durchgeführt. Das System analysiert alle Mietverträge, identifiziert Kündigungsoptionen, segmentiert Mieter und entwickelt eine vollständige Neuvermietungsstrategie mit Markterschließung und Leadgenerierung.",
+      sources: [
+        { title: "Vertragsmatrix_Q1.xlsx", docId: "doc_9", page: 1 },
+        { title: "Mieter_Segmente_2025.xlsx", docId: "doc_10", page: 3 },
+        { title: "Vermietungs_Dashboard.pbix", docId: "doc_11", page: 1 }
+      ],
+      thinkingSequence: ["Initialisiere Multi-Agent-System...", "Starte Vertragsanalyse...", "Beginne Mietersegmentierung..."]
+    }
   }
 ];
 

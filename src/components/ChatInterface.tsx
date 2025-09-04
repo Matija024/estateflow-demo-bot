@@ -6,6 +6,8 @@ import { Send } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 import { getHardcodedAnswer } from "@/lib/hardcoded/answers";
 import { supabase } from "@/integrations/supabase/client";
+import { runMultiAgentProcess, AgentStep } from "@/lib/multi-agent-process";
+
 interface Message {
   id: string;
   type: 'user' | 'assistant';
@@ -17,6 +19,7 @@ interface Message {
     page?: number;
   }>;
   thinking?: string[];
+  agentSteps?: AgentStep[];
 }
 interface ChatInterfaceProps {
   selectedDocuments: string[];
@@ -29,6 +32,8 @@ export function ChatInterface({
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentThinking, setCurrentThinking] = useState<string[] | null>(null);
+  const [currentAgentStep, setCurrentAgentStep] = useState<AgentStep | null>(null);
+  const [isMultiAgentProcessRunning, setIsMultiAgentProcessRunning] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({
@@ -42,6 +47,26 @@ export function ChatInterface({
       await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1500));
     }
     setCurrentThinking(null);
+  };
+
+  const simulateMultiAgentProcess = async (): Promise<AgentStep[]> => {
+    const steps: AgentStep[] = [];
+    setIsMultiAgentProcessRunning(true);
+    
+    return new Promise((resolve) => {
+      runMultiAgentProcess(
+        (step: AgentStep) => {
+          setCurrentAgentStep(step);
+          steps.push(step);
+          scrollToBottom();
+        },
+        () => {
+          setIsMultiAgentProcessRunning(false);
+          setCurrentAgentStep(null);
+          resolve(steps);
+        }
+      );
+    });
   };
   const handleSendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
@@ -58,17 +83,41 @@ export function ChatInterface({
     // Try to get hardcoded answer first
     const hardcodedAnswer = getHardcodedAnswer(content);
     if (hardcodedAnswer) {
-      const thinkingSequence = hardcodedAnswer.thinkingSequence || ["Denke nach..."];
-      await simulateThinkingSequence(thinkingSequence);
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: hardcodedAnswer.answer,
-        timestamp: new Date(),
-        sources: hardcodedAnswer.sources,
-        thinking: thinkingSequence
-      };
-      setMessages(prev => [...prev, assistantMessage]);
+      // Check if this is the Bad Homburg process
+      const isBadHomburgProcess = content.toLowerCase().includes("neuvermietungsbedarf") && 
+                                  content.toLowerCase().includes("bad homburg");
+      
+      if (isBadHomburgProcess) {
+        // Run multi-agent process
+        const agentSteps = await simulateMultiAgentProcess();
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: hardcodedAnswer.answer,
+          timestamp: new Date(),
+          sources: hardcodedAnswer.sources,
+          thinking: hardcodedAnswer.thinkingSequence,
+          agentSteps: agentSteps
+        };
+        
+        setMessages(prev => [...prev, assistantMessage]);
+      } else {
+        // Regular thinking sequence
+        const thinkingSequence = hardcodedAnswer.thinkingSequence || ["Denke nach..."];
+        await simulateThinkingSequence(thinkingSequence);
+        
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: hardcodedAnswer.answer,
+          timestamp: new Date(),
+          sources: hardcodedAnswer.sources,
+          thinking: thinkingSequence
+        };
+        
+        setMessages(prev => [...prev, assistantMessage]);
+      }
     } else {
       // Call real ChatGPT API via edge function
       const thinkingSequence = ["Verbinde mit ChatGPT...", "Analysiere Anfrage...", "Generiere Antwort..."];
@@ -155,6 +204,23 @@ export function ChatInterface({
                 <Card className="flex-1 max-w-3xl p-4 bg-estate-bg-secondary border-estate-border">
                   <div className="text-sm text-estate-text-secondary italic">
                     💭 {currentThinking[currentThinking.length - 1]}
+                  </div>
+                </Card>
+              </div>}
+
+            {currentAgentStep && <div className="flex gap-3 mb-6">
+                <div className="w-8 h-8 rounded-full bg-estate-purple-light text-estate-purple-dark flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm">{currentAgentStep.icon}</span>
+                </div>
+                <Card className="flex-1 max-w-3xl p-4 bg-estate-bg-secondary border-estate-border">
+                  <div className="text-sm font-medium text-estate-text-primary mb-2">
+                    🤖 {currentAgentStep.agent}
+                  </div>
+                  <div className="text-sm font-medium text-estate-text-primary mb-1">
+                    {currentAgentStep.type === 'thinking' ? 'Denkt...' : 'Macht...'} {currentAgentStep.action}
+                  </div>
+                  <div className="text-sm text-estate-text-secondary">
+                    {currentAgentStep.details}
                   </div>
                 </Card>
               </div>}
