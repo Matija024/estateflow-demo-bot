@@ -197,7 +197,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     id: 21,
     agent: "🤖 Interaktionsagent",
     type: "doing",
-    details: "📊 Neuvermietungsanalyse erfolgreich durchgeführt.\n\nSoll ich für die Mieter der Kategorie B und C die nächsten Schritte automatisiert einleiten?",
+    details: "Neuvermietungsanalyse erfolgreich durchgeführt.\n\nSoll ich für die Mieter der Kategorie B und C die nächsten Schritte automatisiert einleiten?",
     duration: 2000,
     icon: "📊"
   }
