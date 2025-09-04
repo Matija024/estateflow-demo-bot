@@ -71,7 +71,7 @@ const answerPatterns: AnswerPattern[] = [
         { title: "SurveyTool - Marktanalyse", docId: "survey_system", page: 1 },
         { title: "MaklerCRM - Terminverwaltung", docId: "crm_system", page: 1 }
       ],
-      thinkingSequence: ["Initialisiere Multi-Agent-System...", "Starte Vertragsanalyse...", "Beginne Mietersegmentierung..."]
+      thinkingSequence: ["Starte Vertragsanalyse...", "Beginne Mietersegmentierung...", "Finalisiere Analyse..."]
     }
   }
 ];

@@ -118,7 +118,7 @@ export function ChatInterface({
         const introMessage: Message = {
           id: Date.now().toString() + "_intro",
           type: "assistant",
-          content: "🔄 **Starte umfassende Neuvermietungsanalyse für Bad Homburg**\n\nIch führe jetzt eine Multi-Agent-Analyse durch, die folgende Bereiche abdeckt:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
+          content: "🔄 **Initialisiere Multi-Agent-System**\n\nStarte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
           timestamp: new Date(),
           agentType: "thinking"
         };
