@@ -37,7 +37,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     agent: "🤖 Kategorisierungs- & Priorisierungsagent",
     type: "thinking",
     details: "Erstelle A- B- C- Analyse anhand Vertragsmatrix",
-    duration: getRandomDuration(),
+    duration: 7000,
     icon: "🔍"
   },
 
@@ -57,7 +57,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     agent: "🤖 Dashboard- & Auswertungsagent",
     type: "thinking",
     details: "Daten empfangen Dashboard erstellen: Vertragsinfos, Rückmeldungen, Kategorien.",
-    duration: getRandomDuration(),
+    duration: 7000,
     icon: "🔍"
   },
   {
