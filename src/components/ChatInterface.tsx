@@ -311,31 +311,31 @@ export function ChatInterface({
 
     setIsLoading(true);
 
-    // Try to get hardcoded answer first
-    const hardcodedAnswer = getHardcodedAnswer(content);
-    if (hardcodedAnswer) {
-      // Check if this is the Bad Homburg process
-      const isBadHomburgProcess = content.toLowerCase().includes("neuvermietungsbedarf") && content.toLowerCase().includes("bad homburg");
-      
-      if (isBadHomburgProcess) {
-        // Add introductory message
-        const introMessage: Message = {
-          id: Date.now().toString() + "_intro",
-          type: "assistant",
-          content: "Initialisiere Multi-Agent-System\n\n🔄 Starte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
-          timestamp: new Date(),
-          agentType: "thinking"
-        };
-        setMessages(prev => [...prev, introMessage]);
-        setIsLoading(true);
+    // Check if this is the Bad Homburg multi-agent process first
+    const isBadHomburgProcess = content.toLowerCase().includes("neuvermietungsbedarf") && content.toLowerCase().includes("bad homburg");
+    
+    if (isBadHomburgProcess) {
+      // Add introductory message
+      const introMessage: Message = {
+        id: Date.now().toString() + "_intro",
+        type: "assistant",
+        content: "Initialisiere Multi-Agent-System\n\n🔄 Starte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
+        timestamp: new Date(),
+        agentType: "thinking"
+      };
+      setMessages(prev => [...prev, introMessage]);
+      setIsLoading(true);
 
-        // Small delay before starting the process
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setIsLoading(false);
+      // Small delay before starting the process
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setIsLoading(false);
 
-        // Run multi-agent process
-        await simulateMultiAgentProcess();
-      } else {
+      // Run multi-agent process
+      await simulateMultiAgentProcess();
+    } else {
+      // Try to get hardcoded answer first
+      const hardcodedAnswer = getHardcodedAnswer(content);
+      if (hardcodedAnswer) {
         // Regular thinking sequence
         const thinkingSequence = hardcodedAnswer.thinkingSequence || ["Denke nach..."];
         await simulateThinkingSequence(thinkingSequence);
@@ -348,52 +348,52 @@ export function ChatInterface({
           thinking: thinkingSequence
         };
         setMessages(prev => [...prev, assistantMessage]);
-      }
-    } else {
-      // Call real ChatGPT API via edge function
-      const thinkingSequence = ["Verbinde mit ChatGPT...", "Analysiere Anfrage...", "Generiere Antwort..."];
-      await simulateThinkingSequence(thinkingSequence);
-      
-      try {
-        const { data, error } = await supabase.functions.invoke('chat-gpt', {
-          body: {
-            message: content,
-            context: selectedDocuments.length > 0 ? "Ausgewählte Dokumente verfügbar" : ""
+      } else {
+        // Call real ChatGPT API via edge function
+        const thinkingSequence = ["Verbinde mit ChatGPT...", "Analysiere Anfrage...", "Generiere Antwort..."];
+        await simulateThinkingSequence(thinkingSequence);
+        
+        try {
+          const { data, error } = await supabase.functions.invoke('chat-gpt', {
+            body: {
+              message: content,
+              context: selectedDocuments.length > 0 ? "Ausgewählte Dokumente verfügbar" : ""
+            }
+          });
+          
+          if (error) {
+            console.error('Edge function error:', error);
+            throw error;
           }
-        });
-        
-        if (error) {
-          console.error('Edge function error:', error);
-          throw error;
-        }
-        
-        // Generate sources based on selected documents
-        const sources = selectedDocuments.length > 0 
-          ? documents.filter(doc => selectedDocuments.includes(doc.id)).map(doc => ({ 
-              title: doc.name, 
-              docId: doc.id 
-            }))
-          : [];
+          
+          // Generate sources based on selected documents
+          const sources = selectedDocuments.length > 0 
+            ? documents.filter(doc => selectedDocuments.includes(doc.id)).map(doc => ({ 
+                title: doc.name, 
+                docId: doc.id 
+              }))
+            : [];
 
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          type: 'assistant',
-          content: data.response || "Entschuldigung, ich konnte keine Antwort generieren.",
-          timestamp: new Date(),
-          sources: sources,
-          thinking: thinkingSequence
-        };
-        setMessages(prev => [...prev, assistantMessage]);
-      } catch (error) {
-        console.error('Error calling ChatGPT:', error);
-        const errorMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          type: 'assistant',
-          content: "Entschuldigung, es gab einen Fehler beim Verbinden mit ChatGPT. Bitte versuchen Sie es erneut.",
-          timestamp: new Date(),
-          thinking: thinkingSequence
-        };
-        setMessages(prev => [...prev, errorMessage]);
+          const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            type: 'assistant',
+            content: data.response || "Entschuldigung, ich konnte keine Antwort generieren.",
+            timestamp: new Date(),
+            sources: sources,
+            thinking: thinkingSequence
+          };
+          setMessages(prev => [...prev, assistantMessage]);
+        } catch (error) {
+          console.error('Error calling ChatGPT:', error);
+          const errorMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            type: 'assistant',
+            content: "Entschuldigung, es gab einen Fehler beim Verbinden mit ChatGPT. Bitte versuchen Sie es erneut.",
+            timestamp: new Date(),
+            thinking: thinkingSequence
+          };
+          setMessages(prev => [...prev, errorMessage]);
+        }
       }
     }
     setIsLoading(false);
