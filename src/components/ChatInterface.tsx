@@ -87,29 +87,30 @@ export function ChatInterface({
     for (let i = startIndex; i < BAD_HOMBURG_PROCESS.length; i++) {
       const step = BAD_HOMBURG_PROCESS[i];
       
-      // Check if this step requires user input
-      if (step.requiresUserInput && step.type === 'user_prompt') {
-        setCurrentUserPrompt(step.userPrompt || step.details);
+      // Handle steps with user input (including merged doing+user_prompt steps)
+      if (step.requiresUserInput) {
         setAwaitingUserResponse(true);
+        setCurrentUserPrompt(step.userPrompt || "Bitte geben Sie Ihre Antwort ein.");
         setPausedStepIndex(i + 1); // Resume from next step
         
-        // Add the user prompt message
-        const promptMessage: Message = {
+        // For merged steps, show the full content including the user prompt
+        const stepContent = `${step.agent}\n\n${step.icon} ${step.details}`;
+        const agentMessage: Message = {
           id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
-          content: `❓ **System**\n\n${step.details}`,
+          content: stepContent,
           timestamp: new Date(),
           isAgentStep: true,
-          agentType: 'user_prompt'
+          agentType: step.type
         };
-        setMessages(prev => [...prev, promptMessage]);
+        setMessages(prev => [...prev, agentMessage]);
         scrollToBottom();
         return; // Pause the process here
       }
 
       // Handle confirmation step (uses user response)
       if (step.type === 'confirmation' && userResponse) {
-        const confirmationContent = `✅ **System**\n\n${step.details}\n\n*Ihre Antwort: "${userResponse}"*`;
+        const confirmationContent = `System\n\n✅ ${step.details}\n\n*Ihre Antwort: "${userResponse}"*`;
         const confirmationMessage: Message = {
           id: `step-${step.id}-${Date.now()}`,
           type: 'assistant',
@@ -121,8 +122,8 @@ export function ChatInterface({
         setMessages(prev => [...prev, confirmationMessage]);
         setUserResponse(null); // Clear after using
       } else {
-        // Regular agent step processing - simplified display
-        const stepContent = `👤 **${step.agent}**\n\n${step.icon} ${step.details}`;
+        // Regular agent step processing - clean formatting with agent name on separate line
+        const stepContent = `${step.agent}\n\n${step.icon} ${step.details}`;
         
         const agentMessage: Message = {
           id: `step-${step.id}-${Date.now()}`,
@@ -151,7 +152,7 @@ export function ChatInterface({
     const completionMessage: Message = {
       id: `completion-${Date.now()}`,
       type: 'assistant',
-      content: "✅ **Multi-Agent-Analyse abgeschlossen**\n\nDie umfassende Neuvermietungsanalyse wurde erfolgreich durchgeführt. Alle 11 Agenten haben ihre Aufgaben koordiniert abgearbeitet und strategische Empfehlungen entwickelt.",
+      content: "System\n\n✅ Multi-Agent-Analyse abgeschlossen\n\nDie umfassende Neuvermietungsanalyse wurde erfolgreich durchgeführt. Alle 11 Agenten haben ihre Aufgaben koordiniert abgearbeitet und strategische Empfehlungen entwickelt.",
       timestamp: new Date(),
       agentType: 'confirmation'
     };
@@ -196,7 +197,7 @@ export function ChatInterface({
         const introMessage: Message = {
           id: Date.now().toString() + "_intro",
           type: "assistant",
-          content: "🔄 **Initialisiere Multi-Agent-System**\n\nStarte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
+          content: "Initialisiere Multi-Agent-System\n\n🔄 Starte umfassende Neuvermietungsanalyse für Bad Homburg.\n\nDie Multi-Agent-Analyse deckt folgende Bereiche ab:\n• Vertragsanalyse und Kündigungsoptionen\n• Mietersegmentierung und Zielgruppenidentifikation\n• Markterschließung und Leadgenerierung\n• Vermietungsstrategie-Entwicklung\n\nDies kann einen Moment dauern...",
           timestamp: new Date(),
           agentType: "thinking"
         };

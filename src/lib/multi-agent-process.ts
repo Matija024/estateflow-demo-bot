@@ -66,27 +66,16 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     agent: "Interaktions- & Datenerhebungsagent",
     type: "doing",
     action: "Sammle Mietrückmeldungen",
-    details: "Ich habe die Rückmeldungen gesammelt: Manche Mieter brauchen mehr Fläche, manche weniger, andere bleiben stabil. Diese Daten gehen jetzt gesammelt an den Dashboard-Agenten.",
+    details: "Ich habe die Rückmeldungen gesammelt: Manche Mieter brauchen mehr Fläche, manche weniger, andere bleiben stabil. Diese Daten gehen jetzt gesammelt an den Dashboard-Agenten.\n\nNachfrage mit zusätzlichen Dokumenten: Lieferung einer Liste mit Ansprechpartnern, Terminvorschlägen und zugehörige Gesprächsleitfäden für Mieter der Kategorie A\n\nMöchten Sie die Liste mit Ansprechpartnern, Terminvorschlägen und Gesprächsleitfäden für A-Mieter jetzt erhalten? (ja/nein)",
     duration: 3000,
-    icon: "📊"
-  },
-
-  // USER PROMPT
-  {
-    id: 7,
-    agent: "System",
-    type: "user_prompt",
-    action: "Benötige Ihre Eingabe",
-    details: "Nachfrage mit zusätzlichen Dokumenten: Lieferung einer Liste mit Ansprechpartnern, Terminvorschlägen und zugehörige Gesprächsleitfäden für Mieter der Kategorie A",
-    duration: 0,
-    icon: "❓",
+    icon: "📊",
     requiresUserInput: true,
     userPrompt: "Möchten Sie die Liste mit Ansprechpartnern, Terminvorschlägen und Gesprächsleitfäden für A-Mieter jetzt erhalten? (ja/nein)"
   },
 
   // CONFIRMATION
   {
-    id: 8,
+    id: 7,
     agent: "System",
     type: "confirmation",
     action: "Verarbeite Benutzerantwort",
@@ -97,7 +86,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 4. Dashboard- & Auswertungsagent
   {
-    id: 9,
+    id: 8,
     agent: "Dashboard- & Auswertungsagent",
     type: "thinking",
     action: "Konsolidiere alle Daten im Dashboard",
@@ -106,7 +95,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 10,
+    id: 9,
     agent: "Dashboard- & Auswertungsagent",
     type: "doing",
     action: "Erstelle Übersicht mit Ampellogik",
@@ -117,7 +106,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 5. Entscheidungsagent
   {
-    id: 11,
+    id: 10,
     agent: "Entscheidungsagent",
     type: "thinking",
     action: "Analysiere Handlungsoptionen",
@@ -126,7 +115,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 12,
+    id: 11,
     agent: "Entscheidungsagent",
     type: "doing",
     action: "Entwickle Maßnahmenpakete",
@@ -137,7 +126,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 6. Firmenlistenagent
   {
-    id: 13,
+    id: 12,
     agent: "Firmenlistenagent",
     type: "thinking",
     action: "Durchsuche Unternehmensverzeichnisse",
@@ -146,7 +135,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 14,
+    id: 13,
     agent: "Firmenlistenagent",
     type: "doing",
     action: "Erstelle qualifizierte Longlist",
@@ -157,7 +146,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 7. Ansprechpartner-Identifikationsagent
   {
-    id: 15,
+    id: 14,
     agent: "Ansprechpartner-Identifikationsagent",
     type: "thinking",
     action: "Recherchiere Entscheidungsträger",
@@ -166,7 +155,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 16,
+    id: 15,
     agent: "Ansprechpartner-Identifikationsagent",
     type: "doing",
     action: "Erstelle qualifizierte Kontaktliste",
@@ -177,7 +166,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 8. Ansprache- & Terminvereinbarungsagent
   {
-    id: 17,
+    id: 16,
     agent: "Ansprache- & Terminvereinbarungsagent",
     type: "thinking",
     action: "Entwickle personalisierte Ansprache-Strategie",
@@ -186,7 +175,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 18,
+    id: 17,
     agent: "Ansprache- & Terminvereinbarungsagent",
     type: "doing",
     action: "Vereinbare Ersttermine",
@@ -197,7 +186,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 9. Maklermanagement- & Netzwerksteuerungsagent
   {
-    id: 19,
+    id: 18,
     agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "thinking",
     action: "Koordiniere externes Maklernetzwerk",
@@ -206,7 +195,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 20,
+    id: 19,
     agent: "Maklermanagement- & Netzwerksteuerungsagent",
     type: "doing",
     action: "Optimiere Makler-Pipeline",
@@ -217,7 +206,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 10. Marketingmaßnahmen- & Sichtbarkeitsagent
   {
-    id: 21,
+    id: 20,
     agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "thinking",
     action: "Entwickle umfassende Marketing-Strategie",
@@ -226,7 +215,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 22,
+    id: 21,
     agent: "Marketingmaßnahmen- & Sichtbarkeitsagent",
     type: "doing",
     action: "Implementiere Marktpräsenz",
@@ -237,7 +226,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
 
   // 11. Abschlussmanagement- & Dokumentationsagent
   {
-    id: 23,
+    id: 22,
     agent: "Abschlussmanagement- & Dokumentationsagent",
     type: "thinking",
     action: "Orchestriere Vertragsverhandlungen",
@@ -246,7 +235,7 @@ export const BAD_HOMBURG_PROCESS: AgentStep[] = [
     icon: "🔍"
   },
   {
-    id: 24,
+    id: 23,
     agent: "Abschlussmanagement- & Dokumentationsagent",
     type: "doing",
     action: "Finalisiere Vertragsabschlüsse",
