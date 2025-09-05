@@ -26,7 +26,7 @@ const UeberUns = () => {
               Jedes Mitglied entwickelt eigene Module und Lösungen, die wie in einem App Store 
               allen Partnern zur Verfügung stehen. So entsteht ein dynamisches Ökosystem, das wir gemeinsam 
               weiterentwickeln – mit einem klaren Anspruch: die <strong>Marktführerschaft auszubauen</strong> 
-              und die Immobilienwirtschaft in eine smarte, agile und <strong>zukunftsfähige Ära</strong> zu führen.
+               und die Immobilienwirtschaft in eine smarte, agile und <strong>zukunftsfähige Ära</strong> zu führen.
             </p>
           </div>
         </div>
