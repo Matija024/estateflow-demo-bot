@@ -9,11 +9,16 @@ const UeberUns = () => {
           <h1 className="text-4xl font-bold text-estate-text-primary mb-6">Über uns</h1>
           <p className="text-lg text-estate-text-secondary mb-4">
             Prism as a Service – Gemeinsam die Zukunft gestalten\n
-Wir sind ein Konsortium von 20 führenden Immobilienunternehmen, die sich zusammengeschlossen haben, um das Asset Management neu zu definieren. Unser Ziel: die Entwicklung von KI-nativen Organisationen, in denen Geschäftsprozesse nicht nur digitalisiert, sondern von Grund auf durch Künstliche Intelligenz gesteuert werden.
+            Wir sind ein Konsortium von 20 führenden Immobilienunternehmen, die sich zusammengeschlossen haben, 
+            um das Asset Management neu zu definieren. Unser Ziel: die Entwicklung von KI-nativen Organisationen, 
+            in denen Geschäftsprozesse nicht nur digitalisiert, sondern von Grund auf durch Künstliche Intelligenz gesteuert werden.
           </p>
           <div className="bg-estate-bg-secondary rounded-lg p-6 shadow-card">
             <p className="text-estate-text-secondary">
-              Hier finden Sie bald detaillierte Informationen über unsere Mission, Vision und das Team hinter EstateFlow.
+              Mit Prism as a Service schaffen wir eine Plattform, die kontinuierlich wächst: Jedes Mitglied entwickelt eigene Module 
+              und Lösungen, die wie in einem App Store allen Partnern zur Verfügung stehen. So entsteht ein dynamisches Ökosystem,
+              das wir gemeinsam weiterentwickeln – mit einem klaren Anspruch: die Marktführerschaft auszubauen und die Immobilienwirtschaft 
+              in eine smarte, agile und zukunftsfähige Ära zu führen.
             </p>
           </div>
         </div>
